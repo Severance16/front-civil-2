@@ -1,22 +1,19 @@
+import { UserRegisterForm } from "@/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Button, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
-
-interface IUser {
-  name: string;
-  lastname: string;
-  email: string;
-  password: string;
-  position: string;
-  address: string;
-  phone: string;
-}
+import {
+  Button,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [visiblePass, setVisiblePass] = useState(true);
   const [confirmVisiblePass, setConfirmVisiblePass] = useState(true);
-  const [data, setData] = useState<IUser>({
+  const [data, setData] = useState<UserRegisterForm>({
     name: "",
     lastname: "",
     email: "",
@@ -34,7 +31,7 @@ export default function RegisterForm() {
     }
   };
 
-  const changeValue = (key: keyof IUser, value: string) => {
+  const changeValue = (key: keyof UserRegisterForm, value: string) => {
     setData({
       ...data,
       [key]: value,
@@ -169,12 +166,70 @@ export default function RegisterForm() {
             )}
           </TouchableOpacity>
         </View>
-      </View>
 
+        <View style={styles.inputContainer}>
+          <MaterialCommunityIcons
+            // name="account-tie-hat-outline"
+            name="badge-account-outline"
+            // arm-flex-outline
+            size={20}
+            color="#EFAD29"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(e) => {
+              changeValue("position", e);
+            }}
+            value={data?.position}
+            placeholder="Cargo"
+            keyboardType="default"
+            autoCapitalize="words"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <MaterialCommunityIcons
+            name="map-marker-radius-outline"
+            size={20}
+            color="#EFAD29"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(e) => {
+              changeValue("address", e);
+            }}
+            value={data?.address}
+            placeholder="Dirección"
+            keyboardType="default"
+            autoCapitalize="words"
+          />
+        </View>
+        
+        <View style={styles.inputContainer}>
+          <MaterialCommunityIcons
+            name="phone-dial"
+            size={20}
+            color="#EFAD29"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(e) => {
+              changeValue("phone", e);
+            }}
+            value={data?.phone}
+            placeholder="Teléfono"
+            keyboardType="number-pad"
+            autoCapitalize="words"
+          />
+        </View>
+
+
+
+      </View>
       <Button
-        title="Iniciar sesión"
+        title="Registrarse"
         onPress={handleSubmit}
-        accessibilityLabel="Iniciar sesión"
+        accessibilityLabel="Registrarse"
         color={"#EFAD29"}
       />
     </>
@@ -182,9 +237,32 @@ export default function RegisterForm() {
 }
 
 const styles = StyleSheet.create({
+  // formContainer: {
+  //   width: 200,
+  //   margin: 10,
+  //   gap:10
+  // },
+  // inputContainer: {
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   gap: 2,
+  //   borderBottomWidth: 0.3,
+  //   borderColor: "#5B5B5E",
+  // },
+  // input: {
+  //   flex: 1,
+  //   width: 150,
+  //   margin: 0,
+  //   paddingHorizontal: 8,
+  //   paddingVertical: 6,
+  //   color: "#262829",
+  // },
   formContainer: {
     width: 200,
     margin: 10,
+    gap: 10,
   },
   inputContainer: {
     display: "flex",

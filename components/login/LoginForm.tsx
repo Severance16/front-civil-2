@@ -16,7 +16,7 @@ export default function LoginForm() {
   
     const handleSubmit = async () => {
       try {
-        const { data } = await clientAxios.post("/auth/login", {
+        const { data } = await clientAxios.post<string>("/auth/login", {
           email,
           password,
         });
@@ -98,6 +98,7 @@ export default function LoginForm() {
     formContainer: {
       width: 200,
       margin: 10,
+      gap: 10,
     },
     inputContainer: {
       display: "flex",

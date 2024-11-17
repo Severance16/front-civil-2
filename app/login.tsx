@@ -10,7 +10,7 @@ export default function Login() {
     
   return (
     <AuthBackgroud>
-      <View style={styles.logoContainer}>
+      <View style={styles.loginContainer}>
         <Image
           style={styles.tinyLogo}
           source={require("../assets/images/logo-gris-oscuro.png")}
@@ -23,7 +23,7 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  logoContainer: {
+  loginContainer: {
     width: "100%",
     alignItems: "center",
     gap: 20,

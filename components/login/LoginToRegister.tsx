@@ -5,11 +5,11 @@ import { Text, TouchableOpacity } from 'react-native'
 export default function LoginToRegister() {
     const router = useRouter()
 
-    const navigateSignUp = () => {
+    const navigateToRegister = () => {
         router.replace("/register")
     }
     return (
-        <TouchableOpacity onPress={navigateSignUp}>
+        <TouchableOpacity onPress={navigateToRegister}>
             <Text style={{ color: "#5B5B5E" }}>Registrate</Text>
         </TouchableOpacity>
     )
