@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const authSchema = z.object({
+export const userSchema = z.object({
   id: z.number(),
   name: z.string(),
   lastname: z.string(),
@@ -11,11 +11,11 @@ const authSchema = z.object({
   phone: z.string(),
   createdAt: z.date(),
 });
-type Auth = z.infer<typeof authSchema>;
+type User = z.infer<typeof userSchema>;
 
-export type UserLoginForm = Pick<Auth, "email" | "password">;
+export type UserLoginForm = Pick<User, "email" | "password">;
 export type UserRegisterForm = Pick<
-  Auth,
+  User,
   "name" | "lastname" | "email" | "password" | "position" | "address" | "phone"
 >;
 
@@ -51,7 +51,7 @@ export type DashBoardProject = Pick<
   Project,
   "id" | "name" | "owner" | "address" | "workType"
 >;
-export type ProjectData = Pick<Project, "id" | "address"| "authorizedLevels"| "createdAt" |"endDate"|"ingResidentId"|"license"|"name"|"owner"|"photo"|"startDate"|"totalArea"|"workType">
+export type ProjectData = Pick<Project, "id" | "address" | "authorizedLevels" | "createdAt" | "endDate" | "ingResidentId" | "license" | "name" | "owner" | "photo" | "startDate" | "totalArea" | "workType">
 
 export const dashboardProjectSchema = z.array(
   projectsSchema.pick({

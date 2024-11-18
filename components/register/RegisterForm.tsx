@@ -1,7 +1,11 @@
-import { UserRegisterForm } from "@/types";
+import clientAxios from "@/clients/clientAxios";
+import { UserRegisterForm, userSchema } from "@/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { isAxiosError } from "axios";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
   Button,
   StyleSheet,
   TextInput,
@@ -9,31 +13,49 @@ import {
   View,
 } from "react-native";
 
+const initialUser = {
+  name: "",
+  lastname: "",
+  email: "",
+  password: "",
+  position: "",
+  address: "",
+  phone: ""
+}
+
 export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [visiblePass, setVisiblePass] = useState(true);
   const [confirmVisiblePass, setConfirmVisiblePass] = useState(true);
-  const [data, setData] = useState<UserRegisterForm>({
-    name: "",
-    lastname: "",
-    email: "",
-    password: "",
-    position: "",
-    address: "",
-    phone: "",
-  });
+  const [user, setUser] = useState<UserRegisterForm>(initialUser);
+
+  
 
   const handleSubmit = async () => {
+    if (user.password !== confirmPassword) {
+      Alert.alert("Las contraseñas no coinciden.")
+      return;
+    }
     try {
-      console.log("Registrando...");
+      const { data } = await clientAxios.post("/auth/create-user", user);
+      const response = userSchema.safeParse(data)
+      if (response.success) {
+        setUser(initialUser)
+        Alert.alert("Usuario creado correctamente.")
+        router.replace("/login")
+      }else{
+        Alert.alert("Algo sucedio, vuelve a intentarlo.")
+      }
     } catch (error) {
-      console.log(error);
+      if (isAxiosError(error) && error.response) {
+        Alert.alert(error.response.data.error);
+      }
     }
   };
 
   const changeValue = (key: keyof UserRegisterForm, value: string) => {
-    setData({
-      ...data,
+    setUser({
+      ...user,
       [key]: value,
     });
   };
@@ -60,7 +82,7 @@ export default function RegisterForm() {
             onChangeText={(e) => {
               changeValue("name", e);
             }}
-            value={data?.name}
+            value={user?.name}
             placeholder="Nombre"
             keyboardType="default"
             autoCapitalize="words"
@@ -78,7 +100,7 @@ export default function RegisterForm() {
             onChangeText={(e) => {
               changeValue("lastname", e);
             }}
-            value={data?.lastname}
+            value={user?.lastname}
             placeholder="Apellido"
             keyboardType="default"
             autoCapitalize="words"
@@ -96,7 +118,7 @@ export default function RegisterForm() {
             onChangeText={(e) => {
               changeValue("email", e);
             }}
-            value={data?.email}
+            value={user?.email}
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
@@ -112,7 +134,7 @@ export default function RegisterForm() {
           <TextInput
             style={styles.input}
             onChangeText={(e) => changeValue("password", e)}
-            value={data.password}
+            value={user.password}
             placeholder="Contraseña"
             keyboardType="default"
             secureTextEntry={visiblePass}
@@ -180,7 +202,7 @@ export default function RegisterForm() {
             onChangeText={(e) => {
               changeValue("position", e);
             }}
-            value={data?.position}
+            value={user?.position}
             placeholder="Cargo"
             keyboardType="default"
             autoCapitalize="words"
@@ -198,13 +220,13 @@ export default function RegisterForm() {
             onChangeText={(e) => {
               changeValue("address", e);
             }}
-            value={data?.address}
+            value={user?.address}
             placeholder="Dirección"
             keyboardType="default"
             autoCapitalize="words"
           />
         </View>
-        
+
         <View style={styles.inputContainer}>
           <MaterialCommunityIcons
             name="phone-dial"
@@ -216,7 +238,7 @@ export default function RegisterForm() {
             onChangeText={(e) => {
               changeValue("phone", e);
             }}
-            value={data?.phone}
+            value={user?.phone}
             placeholder="Teléfono"
             keyboardType="number-pad"
             autoCapitalize="words"

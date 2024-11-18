@@ -6,7 +6,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ProjectProvider>
-        <Slot />
+          <Slot />
       </ProjectProvider>
     </AuthProvider>
   );

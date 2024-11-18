@@ -1,5 +1,8 @@
 import clientAxios from "@/clients/clientAxios";
 import ProjectCard from "@/components/dashboard.tsx/ProjectCard";
+import ProjectForm from "@/components/dashboard.tsx/ProjectForm";
+import ProjectModal from "@/components/dashboard.tsx/ProjectModal";
+import FloatButton from "@/components/general/FloatButton";
 import Header from "@/components/general/Header";
 import { DashBoardProject, dashboardProjectSchema } from "@/types";
 import { isAxiosError } from "axios";
@@ -9,6 +12,11 @@ import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const [projects, setProjects] = useState<DashBoardProject[]>([]);
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const changeModalVisible = () => {
+    setModalVisible(!modalVisible)
+  }
 
   const getProjects = async () => {
     try {
@@ -33,7 +41,7 @@ export default function Index() {
       <StatusBar style="dark" />
       <View style={styles.containerFluid}>
         <Header />
-        <View style={{ paddingVertical: 20 , gap: 5 }}>
+        <View style={{ paddingVertical: 20, gap: 5 }}>
           <Text style={styles.textWelcom}>Bienvenido!</Text>
           <Text style={styles.textInfoProjects}>
             {projects.length === 0
@@ -41,7 +49,7 @@ export default function Index() {
               : "Aquí tienes la lista de tus proyectos."}
           </Text>
         </View>
-        <ScrollView>
+        <ScrollView style={{ flex: 1 }}>
           <View style={styles.dashboardContainer}>
             {projects.map((project) => (
               <ProjectCard key={project.id} project={project} />
@@ -54,6 +62,10 @@ export default function Index() {
             ))}
           </View>
         </ScrollView>
+        <FloatButton handlePress={changeModalVisible} />
+        <ProjectModal modalVisible={modalVisible}>
+          <ProjectForm changeModalVisible={changeModalVisible} />
+        </ProjectModal>
       </View>
     </>
   );
