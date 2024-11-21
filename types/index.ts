@@ -52,6 +52,7 @@ export type DashBoardProject = Pick<
   "id" | "name" | "owner" | "address" | "workType"
 >;
 export type ProjectData = Pick<Project, "id" | "address" | "authorizedLevels" | "createdAt" | "endDate" | "ingResidentId" | "license" | "name" | "owner" | "photo" | "startDate" | "totalArea" | "workType">
+// export type ProjectCreate = Pick<Project, "address" | "authorizedLevels" | "endDate" | "license" | "name" | "owner" | "photo" | "startDate" | "totalArea" | "workType">
 
 export const dashboardProjectSchema = z.array(
   projectsSchema.pick({
@@ -62,3 +63,11 @@ export const dashboardProjectSchema = z.array(
     workType: true,
   })
 );
+
+export const createProjectSchema = projectsSchema.pick({
+  id: true,
+  name: true,
+  owner: true,
+  address: true,
+  workType: true,
+})

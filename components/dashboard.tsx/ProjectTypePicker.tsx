@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
+import { ProjectCreate } from './ProjectForm';
 
 const items = [
     { label: "Residencial", value: "Residencial" },
@@ -12,7 +13,12 @@ const items = [
     { label: "Vial", value: "Vial" },
     { label: "Hidrahulica", value: "Hidrahulica" },
 ]
-export default function ProjectTypePicker() {
+
+interface ProjectTypePickerProps {
+    changeValue: (key: keyof ProjectCreate, value: string | number) => void
+}
+
+export default function ProjectTypePicker({changeValue}: ProjectTypePickerProps) {
     const [valor, setValor] = useState("")
     return (
         <RNPickerSelect
@@ -25,7 +31,7 @@ export default function ProjectTypePicker() {
             value={valor}
             style={stylesPicker}
             useNativeAndroidPickerStyle={false}
-            onValueChange={(value) => setValor(value)}
+            onValueChange={(value: string) => {changeValue("workType", value); setValor(value)}}
             items={items}
             Icon={() => (<View>
                 <MaterialCommunityIcons

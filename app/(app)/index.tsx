@@ -63,8 +63,8 @@ export default function Index() {
           </View>
         </ScrollView>
         <FloatButton handlePress={changeModalVisible} />
-        <ProjectModal modalVisible={modalVisible}>
-          <ProjectForm changeModalVisible={changeModalVisible} />
+        <ProjectModal modalVisible={modalVisible} changeModalVisible={changeModalVisible} >
+          <ProjectForm changeModalVisible={changeModalVisible} setProjectsDashBoard={setProjects} />
         </ProjectModal>
       </View>
     </>

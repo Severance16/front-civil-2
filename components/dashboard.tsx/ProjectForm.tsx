@@ -1,12 +1,79 @@
-import { Pressable, StyleSheet, TextInput } from 'react-native'
+import { Alert, Pressable, StyleSheet, TextInput } from 'react-native'
 import { Text, View } from 'react-native'
 import ProjectTypePicker from './ProjectTypePicker';
+import { createProjectSchema, DashBoardProject } from '@/types';
+import { useState } from 'react';
+import clientAxios from '@/clients/clientAxios';
+import { isAxiosError } from 'axios';
+import { formatDate } from '@/utils/dateParser';
 
 interface ProjectFormProps {
     changeModalVisible: () => void
+    setProjectsDashBoard: React.Dispatch<React.SetStateAction<DashBoardProject[]>>
+}
+export interface ProjectCreate {
+    address: string
+    authorizedLevels: number | null
+    endDate: string
+    license: string
+    name: string
+    owner: string
+    photo: string
+    startDate: string
+    totalArea: string
+    workType: "Residencial" |
+    "Institucional" |
+    "Urbana" |
+    "Comercial" |
+    "Industrial" |
+    "Vial" |
+    "Hidrahulica" | null
 }
 
-export default function ProjectForm({ changeModalVisible }: ProjectFormProps) {
+export default function ProjectForm({ changeModalVisible, setProjectsDashBoard}: ProjectFormProps) {
+
+    const [project, setProject] = useState<ProjectCreate>({
+        address: "",
+        authorizedLevels: null,
+        endDate: "",
+        license: "",
+        name: "",
+        owner: "",
+        photo: "/assets/images/prueba/const.png",
+        startDate: "",
+        totalArea: "",
+        workType: null
+    })
+
+    const handleSubmit = async () => {
+        try {
+            const startDate = formatDate(project.startDate)
+            const endDate = formatDate(project.endDate)
+            
+            const { data } = await clientAxios.post("/project", {
+                ...project,
+                startDate,
+                endDate
+            })
+            const response = createProjectSchema.safeParse(data)
+            if (response.success) {
+                setProjectsDashBoard((prevItems) => [...prevItems, response.data])
+            }else{
+                Alert.alert("Algo ocurrio.")
+            }
+        } catch (error) {
+            if (isAxiosError(error) && error.response) {
+                Alert.alert(error.response.data.error);
+              }
+        }
+    }
+
+    const changeValue = (key: keyof ProjectCreate, value: string | number) => {
+        setProject({
+            ...project,
+            [key]: value,
+        });
+    };
 
     return (
         <View style={styles.centeredView}>
@@ -16,113 +83,111 @@ export default function ProjectForm({ changeModalVisible }: ProjectFormProps) {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
+                            onChangeText={(e) => {
+                                changeValue("name", e);
+                            }}
+                            value={project?.name}
                             placeholder="Nombre"
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
 
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
+                            onChangeText={(e) => {
+                                changeValue("owner", e);
+                            }}
+                            value={project?.owner}
                             placeholder="Propietario"
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
 
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
+                            onChangeText={(e) => {
+                                changeValue("license", e);
+                            }}
+                            value={project?.license}
                             placeholder="Licencia"
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
+                            onChangeText={(e) => {
+                                changeValue("address", e);
+                            }}
+                            value={project?.address}
                             placeholder="Direccion"
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
+                            onChangeText={(e) => {
+                                changeValue("totalArea", e);
+                            }}
+                            value={project?.totalArea}
                             placeholder="Area"
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
+                            onChangeText={(e) => {
+                                changeValue("authorizedLevels", +e);
+                            }}
+                            value={(project?.authorizedLevels)?.toString()}
                             placeholder="Niveles"
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
                     <View style={styles.inputContainerSelect}>
-
-                        <ProjectTypePicker />
-
+                        <ProjectTypePicker changeValue={changeValue}/>
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
-                            placeholder="Inicio"
+                            onChangeText={(e) => {
+                                changeValue("startDate", e);
+                            }}
+                            value={project?.startDate}
+                            placeholder="Inicio (DD-MM-YY)"
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             textContentType='birthdate'
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("lastname", e);
-                            // }}
-                            // value={user?.lastname}
-                            placeholder="Fin"
+                            onChangeText={(e) => {
+                                changeValue("endDate", e);
+                            }}
+                            value={project?.endDate}
+                            placeholder="Fin (DD-MM-YY)"
                             // keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                         />
                     </View>
                 </View>
 
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
-                    onPress={() => changeModalVisible()}>
-                    <Text style={styles.textStyle}>Hide Modal</Text>
+                    onPress={() => { changeModalVisible(); handleSubmit() }}>
+                    <Text style={styles.textStyle}>Crear proyecto.</Text>
                 </Pressable>
             </View>
         </View>
@@ -156,7 +221,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     buttonClose: {
-        backgroundColor: '#2196F3',
+        backgroundColor: '#EFAD29',
     },
     textStyle: {
         color: 'white',
