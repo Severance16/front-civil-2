@@ -39,7 +39,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard}:
         license: "",
         name: "",
         owner: "",
-        photo: "/assets/images/prueba/const.png",
+        photo: "const.jpg",
         startDate: "",
         totalArea: "",
         workType: null

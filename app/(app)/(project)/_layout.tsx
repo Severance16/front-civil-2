@@ -7,7 +7,7 @@ export default function ProjectLayout() {
       <Tabs.Screen
         name="project"
         options={{
-          title: "Projecto",
+          title: "Información",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account-hard-hat" size={24} color="black" />
           ),

@@ -1,7 +1,11 @@
-import { parse, formatISO } from "date-fns"
+import { parse, formatISO, format } from "date-fns"
 
 export const formatDate = (date: string): string => {
     const parsedDate = parse(date, "dd-MM-yy", new Date())
 
     return formatISO(parsedDate)
+}
+
+export const formatDateLabel = (date: string): string => {
+    return format(new Date(date), "dd-MM-yyyy")
 }
