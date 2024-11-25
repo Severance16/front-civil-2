@@ -22,7 +22,6 @@ export default function Index() {
     try {
       const { data } = await clientAxios("/project");
       const response = dashboardProjectSchema.safeParse(data);
-
       if (response.success) {
         setProjects(response.data);
       }
@@ -51,12 +50,6 @@ export default function Index() {
         </View>
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.dashboardContainer}>
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
             {projects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}

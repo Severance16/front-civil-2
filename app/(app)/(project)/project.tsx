@@ -13,7 +13,6 @@ export default function Project() {
     try {
       const { data } = await clientAxios(`/project/${projectId}`);
       const response = projectsSchema.safeParse(data);
-      console.log("hizo la consulta")
       if (response.success === true) {
         setProject(response.data);
       }else{

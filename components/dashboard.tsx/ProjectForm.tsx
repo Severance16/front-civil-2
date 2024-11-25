@@ -47,13 +47,20 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard}:
 
     const handleSubmit = async () => {
         try {
-            const startDate = formatDate(project.startDate)
-            const endDate = formatDate(project.endDate)
-            
+            const {name, owner, license, address, workType, startDate} = project
+            if ([name, owner, license, address, startDate].includes("") || !workType) {
+                Alert.alert("El projecto no cumple con la información mínima obligatoria.")
+                return
+            }
+            const startDateFormated = formatDate(project.startDate)
+            let endDateFormated = null
+            if (project.endDate !== "") {
+                endDateFormated = formatDate(project.endDate)
+            }
             const { data } = await clientAxios.post("/project", {
                 ...project,
-                startDate,
-                endDate
+                startDateFormated,
+                endDateFormated
             })
             const response = createProjectSchema.safeParse(data)
             if (response.success) {
