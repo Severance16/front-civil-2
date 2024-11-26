@@ -11,100 +11,101 @@ interface ProjectInformationProps {
 
 export default function ProjectInformation({ project }: ProjectInformationProps) {
     return (
-        <View style={styles.conatiner}>
-            <View style={styles.rowGroup}>
-                <View style={{ width: "50%" }}>
-                    <Text style={styles.label}>Id </Text>
-                    <Text style={styles.info}>{project.id}</Text>
+        <>
+            <View style={styles.headerContainer}>
+                <Text style={styles.identifierProject}>{project.id}</Text>
+                <View style={styles.typeContainer}>
+                    <Text style={[styles.label, { fontSize: 12, }]}>Tipo</Text>
+                    <MaterialCommunityIcons name={IconDictonary(project.workType)} size={16} color="#034A44" />
+                    <Text style={{ color: "#262829" }}>{project.workType}</Text>
                 </View>
-                <View style={{ width: 100 }}>
-                    <Text style={[styles.label, styles.alingRight]}>Proyecto</Text>
-                    <MaterialCommunityIcons style={styles.alingRight} name={IconDictonary(project.workType)} size={26} color="#034A44" />
-                    <Text style={[styles.info, styles.alingRight]}>{project.workType}</Text>
-                </View>
-            </View>
-            <View style={{ width: "100%" }}>
-                <Text style={[styles.label, styles.alingRight]}>Propietario</Text>
-                <Text style={[styles.info, styles.alingRight]}>{project.owner}</Text>
-            </View>
-            <View style={styles.rowGroup}>
-                <View style={{ width: "75%" }}>
-                    <Text style={[styles.label]}>Dirección</Text>
-                    <Text style={[styles.info,]}>{project.address}</Text>
-                </View>
-                {project.authorizedLevels > 0 && (
-                    <View style={{ width: "25%" }}>
-                        <Text style={styles.label}>Niveles</Text>
-                        <Text style={styles.info}>{project.authorizedLevels}</Text>
-                    </View>
-                )
-                }
             </View>
 
-            <View style={styles.rowGroup}>
-                <View style={styles.dataGroup}>
-                    <Text style={styles.label}>Finalizacion estimada:</Text>
-                    <Text style={styles.info}>{formatDateLabel(project.endDate)}</Text>
-                </View>
-                <View style={styles.dataGroup}>
+            <View>
+                <Text style={[styles.label, { textAlign: "center" }]}>Propietario</Text>
+                <Text style={styles.dataOwnerProject}>{project.owner} Daniel Chacón Perez</Text>
+            </View>
+
+            <View style={styles.rowContainer}>
+                <View style={styles.datagroup}>
                     <Text style={styles.label}>Inicio de obra</Text>
-                    <Text style={styles.info}>{formatDateLabel(project.startDate)}</Text>
+                    <Text style={styles.dataProject}>{formatDateLabel(project.startDate)}</Text>
                 </View>
+                {project.endDate && (
+                    <View style={styles.datagroup}>
+                        <Text style={styles.label}>Fin de obra</Text>
+                        <Text style={styles.dataProject}>{formatDateLabel(project.endDate)}</Text>
+                    </View>
+                )}
             </View>
 
-            <View>
-                <Text style={styles.label}>Ing. Residente</Text>
-                <Text style={styles.info}>{project.ingResidentId}</Text>
-            </View>
-            <View>
-                <Text style={styles.label}>N. licencia</Text>
-                <Text style={styles.info}>{project.license}</Text>
+            <View style={styles.rowContainer}>
+                <View style={styles.datagroup}>
+                    <Text style={styles.label}>Dirección</Text>
+                    <Text style={styles.dataProject}>{project.address}</Text>
+                </View>
+                {project.totalArea && (
+                    <View style={styles.datagroup}>
+                        <Text style={styles.label}>Area construida</Text>
+                        <Text style={styles.dataProject}>{project.totalArea}</Text>
+                    </View>
+                )}
             </View>
 
-            {project.totalArea && (
-                <View>
-                    <Text style={styles.label}>Area construida</Text>
-                    <Text style={styles.info}>{project.totalArea}</Text>
+            <View style={styles.rowContainer}>
+                <View style={styles.datagroup}>
+                    <Text style={styles.label}>Licencia</Text>
+                    <Text style={styles.dataProject}>{project.license}</Text>
                 </View>
-            )}
-            <View>
-                <Text style={styles.label}>Creacion:</Text>
-                <Text style={styles.info}>{formatDateLabel(project.createdAt)}</Text>
+                {project.authorizedLevels && (
+                    <View style={styles.datagroup}>
+                        <Text style={styles.label}>Niveles</Text>
+                        <Text style={styles.dataProject}>{project.authorizedLevels}</Text>
+                    </View>
+                )}
             </View>
-        </View>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
-    conatiner: {
-        backgroundColor: "#FFF",
-        padding: 10,
+    headerContainer: {
         flex: 1,
-        width: "100%",
-    },
-    rowGroup: {
         flexDirection: "row",
-        justifyContent: "space-between", // Distribuir espacio entre columnas
-        alignItems: "center",        // Alinear elementos al inicio verticalmente
-        marginBottom: 10,
+        justifyContent: "space-between",
+        alignItems: "center",
     },
-    dataGroup: {
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: "red", // Borde para ver la distribución
+    identifierProject: {
+        width: 100,
+        color: "#F1C16D",
+        fontSize: 24,
+        fontWeight: 500
+    },
+    typeContainer: {
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    rowContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    datagroup: {
+        // width: "auto"
+        flex: 1
     },
     label: {
-        color: "#444",                  // Estilo del texto
-        fontSize: 14,
-        fontWeight: "bold",
-        marginBottom: 4,
-    },
-    info: {
-        color: "#000",
-        fontSize: 14,
-        // textAlign: "center"
-    },
-    alingRight: {
+        fontWeight: 500,
+        color: "#F1C16D",
         textAlign: "center"
+    },
+    dataProject: {
+        textAlign: "center",
+        color: "#262829"
+    },
+    dataOwnerProject: {
+        textAlign: "center",
+        fontWeight: "500",
+        fontSize: 20,
+        color: "#262829"
     }
 });

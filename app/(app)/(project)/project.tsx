@@ -1,11 +1,11 @@
 import clientAxios from "@/clients/clientAxios";
 import useProject from "@/hooks/useProject";
 import { ProjectData, projectsSchema } from "@/types";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Image } from 'expo-image';
-import { formatDateLabel } from "@/utils/dateParser";
 import ProjectInformation from "@/components/project/ProjectInformation";
+import ProjectBudgetCard from "@/components/project/ProjectBudgetCard";
 
 export default function Project() {
   const { projectId } = useProject();
@@ -35,17 +35,16 @@ export default function Project() {
   return (
     <ScrollView style={{ flex: 1, paddingTop: 5 }}>
       <View style={styles.container}>
-        <View>
-          <Text style={styles.projectName}>{project.name}</Text>
-        </View>
-
+        <Text style={styles.projectName}>{project.name}</Text>
         <View style={styles.containerImage}>
           <Image style={styles.image} source={`http://192.168.1.135:4000/statics/${project.photo}`} alt="Imagen proyecto" />
         </View>
-        <View style={{flex: 1}}>
-
-        <ProjectInformation project={project}/>
+        <Text style={styles.tittle}>Información base</Text>
+        <View style={styles.containerInfo}>
+          <ProjectInformation project={project} />
         </View>
+        <Text style={styles.tittle}>Presupuestos</Text>
+          <ProjectBudgetCard />
       </View>
     </ScrollView>
   );
@@ -60,21 +59,55 @@ const styles = StyleSheet.create({
   },
   containerImage: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 15
+    marginHorizontal: 15,
+    borderRadius: 5
   },
   image: {
     flex: 1,
     width: "100%",
     aspectRatio: 16 / 9,
     backgroundColor: '#0553',
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.00,
+
+    elevation: 1,
   },
   projectName: {
     fontSize: 28,
     fontWeight: "900",
     color: "#EFAD29",
     textAlign: "center"
+  },
+  containerInfo: {
+    gap: 5,
+    backgroundColor: "#FFF",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    flex: 1,
+    width: "100%",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 1,
+  },
+  tittle: {
+    textAlign: "center", 
+    fontSize: 24, 
+    color: "#EFAD29", 
+    fontWeight: 500, 
+    marginTop: 5
   }
 })
