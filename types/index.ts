@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 export const userSchema = z.object({
   id: z.number(),
@@ -71,3 +71,25 @@ export const createProjectSchema = projectsSchema.pick({
   address: true,
   workType: true,
 })
+
+export const budgetSchema = z.object({
+  id: z.number(),
+  prjectId: z.number(),
+  type: z.enum(["Inicial", "Final"])
+})
+
+export const dashboardBudgetSchema = z.object({
+  Inicial: z.object({
+    id: z.number().nullable(),
+    exist: z.boolean()
+  }),
+  Final: z.object({
+    id: z.number().nullable(),
+    exist: z.boolean()
+  }),
+})
+
+type Budget = z.infer<typeof budgetSchema>;
+type BudgetDashBoard = z.infer<typeof dashboardBudgetSchema>;
+export type BudgetData = Pick<Budget, "id" | "prjectId" | "type">
+export type BudgetDashBoardData = Pick<BudgetDashBoard, "Inicial" | "Final">

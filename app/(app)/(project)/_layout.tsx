@@ -13,7 +13,13 @@ export default function ProjectLayout() {
           ),
         }}
       />
-      <Tabs.Screen name="budget" />
+      <Tabs.Screen name="report" />
+      <Tabs.Screen name="control" />
+      <Tabs.Screen name="inventory" />
+      <Tabs.Screen
+        name="(budget)/index" 
+        options={{href: null, title: "Presupuesto"}}
+      />
     </Tabs>
   );
 }

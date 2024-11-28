@@ -1,8 +1,10 @@
 import React from 'react'
 import { Text } from 'react-native'
 
-export default function Budget() {
+export default function Report() {
   return (
-    <Text>Budget</Text>
+    <Text>
+      Report
+    </Text>
   )
 }
