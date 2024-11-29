@@ -1,7 +1,7 @@
 import clientAxios from "@/clients/clientAxios";
-import ProjectCard from "@/components/dashboard.tsx/ProjectCard";
-import ProjectForm from "@/components/dashboard.tsx/ProjectForm";
-import ProjectModal from "@/components/dashboard.tsx/ProjectModal";
+import ProjectCard from "@/components/dashboard/ProjectCard";
+import ProjectForm from "@/components/dashboard/ProjectForm";
+import ProjectModal from "@/components/dashboard/ProjectModal";
 import FloatButton from "@/components/general/FloatButton";
 import Header from "@/components/general/Header";
 import { DashBoardProject, dashboardProjectSchema } from "@/types";
