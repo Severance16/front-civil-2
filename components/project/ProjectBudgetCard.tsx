@@ -22,7 +22,6 @@ export default function ProjectBudgetCard({ type, exist, budgetId }: ProjectBudg
     }
     const handleBudget = () => {
         router.push(`/(app)/(project)/(budget)?type=${type}&budgetId=${budgetId}`)
-        console.log(`Navega: ${type} y lo ${!exist ? "crea" : "visualiza"}`)
     }
     return (
         <TouchableNativeFeedback onPress={handleBudget} >

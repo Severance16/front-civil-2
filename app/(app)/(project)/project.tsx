@@ -2,10 +2,11 @@ import clientAxios from "@/clients/clientAxios";
 import useProject from "@/hooks/useProject";
 import { dashboardBudgetSchema, ProjectData, projectsSchema } from "@/types";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Image } from 'expo-image';
 import ProjectInformation from "@/components/project/ProjectInformation";
 import ProjectBudgetCard from "@/components/project/ProjectBudgetCard";
+import { isAxiosError } from "axios";
 
 type BudgetInfo = {
   exist: boolean,
@@ -44,7 +45,9 @@ export default function Project() {
         setBudget(initBudget);
       }
     } catch (error) {
-      console.log(error);
+      if (isAxiosError(error) && error.response) {
+        Alert.alert(error.response.data.error);
+      }
     }
   };
 

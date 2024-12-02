@@ -93,3 +93,23 @@ type Budget = z.infer<typeof budgetSchema>;
 type BudgetDashBoard = z.infer<typeof dashboardBudgetSchema>;
 export type BudgetData = Pick<Budget, "id" | "prjectId" | "type">
 export type BudgetDashBoardData = Pick<BudgetDashBoard, "Inicial" | "Final">
+
+export const itemSchema = z.object({
+  id: z.number(),
+  description: z.string(),
+  amount:      z.number(),
+  incidence:   z.number()
+})
+
+export const itemsSchema = z.array(
+  itemSchema.pick({
+    id: true,
+    description: true,
+    amount: true,
+    incidence: true
+  })
+)
+
+ type Item = z.infer<typeof itemSchema>
+
+ export type ItemData = Pick<Item, "id" |"description" | "amount" | "incidence">

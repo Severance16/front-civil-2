@@ -1,39 +1,111 @@
-import React from 'react'
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import clientAxios from '@/clients/clientAxios'
+import { ItemData, itemSchema } from '@/types'
+import { isAxiosError } from 'axios'
+import React, { useState } from 'react'
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
 interface BudgetFormProps {
     changeModalVisible: () => void
-    // setProjectsDashBoard: React.Dispatch<React.SetStateAction<DashBoardProject[]>>
+    budgetId: string
+    setItems: React.Dispatch<React.SetStateAction<ItemData[]>>
 }
-export default function BudgetForm({changeModalVisible}: BudgetFormProps) {
+
+type ItemDataCreate = {
+    description: string,
+    amount: string,
+    incidence: string
+}
+
+const itemDataInit: ItemDataCreate = {
+    description: "",
+    amount: "",
+    incidence: ""
+}
+export default function BudgetForm({changeModalVisible, budgetId, setItems}: BudgetFormProps) {
+
+    const [item, setItem] = useState<ItemDataCreate>(itemDataInit)
+
+    const changeValue = (key: keyof ItemDataCreate, value: string | number) => {
+        setItem({
+            ...item,
+            [key]: value,
+        });
+    };
 
     const handleSubmit = async () => {
-        console.log("Creado item")
+        try {
+            const {description, amount, incidence} = item
+            if ([description, amount, incidence].includes("")) {
+                Alert.alert("El item no cumple con la información mínima obligatoria.")
+                return
+            }
+            const { data } = await clientAxios.post(`/project/budget/${budgetId}/item`,{
+                description,
+                amount: parseFloat(amount),
+                incidence: parseFloat(incidence)
+            })
+            const response = itemSchema.safeParse(data)
+            if (response.success) {
+                setItems((prevItems) => [...prevItems, response.data])
+            }else{
+                Alert.alert("Algo ocurrio.")
+            }
+        } catch (error) {
+            if (isAxiosError(error) && error.response) {
+                Alert.alert(error.response.data.error);
+              }
+        }
     }
+
     return (
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                <Text style={styles.modalText}>Crea un proyecto!</Text>
+                <Text style={styles.modalText}>Crea una actividad!</Text>
                 <View style={styles.formContainer}>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("name", e);
-                            // }}
-                            // value={project?.name}
-                            placeholder="Nombre"
+                            onChangeText={(e) => {
+                                changeValue("description", e);
+                            }}
+                            value={item?.description}
+                            placeholder="Descripción"
                             keyboardType="default"
                             autoCapitalize="sentences"
                         />
                     </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("amount", e);
+                            }}
+                            value={item?.amount}
+                            placeholder="Presupuesto"
+                            keyboardType="number-pad"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("incidence", e);
+                            }}
+                            value={item?.incidence}
+                            placeholder="incidencia"
+                            keyboardType="decimal-pad"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    
 
                 </View>
 
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => { changeModalVisible(); handleSubmit() }}>
-                    <Text style={styles.textStyle}>Crear proyecto.</Text>
+                    <Text style={styles.textStyle}>Crear actividad.</Text>
                 </Pressable>
             </View>
         </View>

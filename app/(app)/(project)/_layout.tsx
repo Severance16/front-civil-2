@@ -52,6 +52,10 @@ export default function ProjectLayout() {
         name="(budget)/index"
         options={{ href: null, title: "Presupuesto" }}
       />
+      <Tabs.Screen
+        name="(budget)/(item)/index"
+        options={{ href: null, title: "Presupuesto" }}
+      />
     </Tabs>
   );
 }
