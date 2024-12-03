@@ -1,8 +1,8 @@
 import clientAxios from "@/clients/clientAxios";
-import BudgetCard from "@/components/budget/BudgetCard";
-import BudgetForm from "@/components/budget/BudgetForm";
 import FloatButton from "@/components/general/FloatButton";
 import ModalGeneral from "@/components/general/ModalGeneral";
+import ItemCard from "@/components/item/ItemCard";
+import ItemForm from "@/components/item/ItemForm";
 import { ItemData, itemsSchema } from "@/types";
 import { isAxiosError } from "axios";
 import { useLocalSearchParams } from "expo-router";
@@ -35,10 +35,10 @@ export default function BudgetDashboard() {
     }
   };
 
-
   const changeModalVisible = () => {
     setModalVisible(!modalVisible);
   };
+  
   useEffect(() => {
     getItemsBudget();
   }, [budgetId]);
@@ -54,7 +54,7 @@ export default function BudgetDashboard() {
       <ScrollView style={{marginTop: 10}}>
         <View style={{ flex: 1, gap: 10}}>
           {items.map((item, index) => (
-            <BudgetCard key={item.id} item={item} order={index}/>
+            <ItemCard key={item.id} item={item} order={index}/>
           ))}
         </View>
       </ScrollView>
@@ -62,7 +62,7 @@ export default function BudgetDashboard() {
         modalVisible={modalVisible}
         changeModalVisible={changeModalVisible}
       >
-        <BudgetForm
+        <ItemForm
           budgetId={budgetId}
           changeModalVisible={changeModalVisible}
           setItems={setItems}

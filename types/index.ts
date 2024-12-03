@@ -97,8 +97,8 @@ export type BudgetDashBoardData = Pick<BudgetDashBoard, "Inicial" | "Final">
 export const itemSchema = z.object({
   id: z.number(),
   description: z.string(),
-  amount:      z.number(),
-  incidence:   z.number()
+  amount: z.number(),
+  incidence: z.number()
 })
 
 export const itemsSchema = z.array(
@@ -110,6 +110,30 @@ export const itemsSchema = z.array(
   })
 )
 
- type Item = z.infer<typeof itemSchema>
+type Item = z.infer<typeof itemSchema>
 
- export type ItemData = Pick<Item, "id" |"description" | "amount" | "incidence">
+export type ItemData = Pick<Item, "id" | "description" | "amount" | "incidence">
+
+export const subItemSchema = z.object({
+  id: z.number(),
+  description: z.string(),
+  unit: z.string().nullable(),
+  quantity: z.number().nullable(),
+  amount: z.number(),
+  incidence: z.number()
+})
+
+export const subItemsSchema = z.array(
+  subItemSchema.pick({
+    id:  true,
+    description: true,
+    unit: true,
+    quantity: true,
+    amount: true,
+    incidence: true
+  })
+)
+
+type SubIten = z.infer<typeof subItemSchema>
+
+export type SubItemData = Pick<SubIten, "id" | "description" | "unit" | "quantity" | "amount" | "incidence">

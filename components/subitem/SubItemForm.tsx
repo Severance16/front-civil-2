@@ -1,66 +1,72 @@
 import clientAxios from '@/clients/clientAxios'
-import { ItemData, itemSchema } from '@/types'
+import { SubItemData, subItemSchema } from '@/types'
 import { isAxiosError } from 'axios'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
-interface BudgetFormProps {
-    changeModalVisible: () => void
-    budgetId: string
-    setItems: React.Dispatch<React.SetStateAction<ItemData[]>>
+type SubItemFormProps = {
+    itemId: string,
+    changeModalVisible: () => void,
+    setSubItems: React.Dispatch<React.SetStateAction<SubItemData[]>>
 }
 
-type ItemDataCreate = {
-    description: string,
-    amount: string,
-    incidence: string
+type SubItemDataCreate = {
+    description: string
+    unit: string //| null
+    quantity: string //| null //Float
+    amount: string //Float
+    incidence: string //Float
 }
 
-const itemDataInit: ItemDataCreate = {
+const SubItemDataInit: SubItemDataCreate = {
     description: "",
+    unit: "",
+    quantity: "",
     amount: "",
     incidence: ""
 }
-export default function BudgetForm({changeModalVisible, budgetId, setItems}: BudgetFormProps) {
 
-    const [item, setItem] = useState<ItemDataCreate>(itemDataInit)
-
-    const changeValue = (key: keyof ItemDataCreate, value: string | number) => {
-        setItem({
-            ...item,
-            [key]: value,
-        });
-    };
+export default function SubItemForm({ itemId, changeModalVisible, setSubItems }: SubItemFormProps) {
+    const [subItem, setSubItem] = useState<SubItemDataCreate>(SubItemDataInit)
 
     const handleSubmit = async () => {
         try {
-            const {description, amount, incidence} = item
+            const { description, unit, amount, incidence, quantity } = subItem
             if ([description, amount, incidence].includes("")) {
-                Alert.alert("El item no cumple con la información mínima obligatoria.")
+                Alert.alert("La subactividad no cumple con la información mínima obligatoria.")
                 return
             }
-            const { data } = await clientAxios.post(`/project/budget/${budgetId}/item`,{
+            const { data } = await clientAxios.post(`/project/budget/item/${itemId}/subitem`, {
                 description,
+                unit: unit !== "" ? unit : null,
+                quantity: quantity !== "" ? parseFloat(quantity) : null,
                 amount: parseFloat(amount),
                 incidence: parseFloat(incidence)
             })
-            const response = itemSchema.safeParse(data)
+            const response = subItemSchema.safeParse(data)
+            console.log(response)
             if (response.success) {
-                setItems((prevItems) => [...prevItems, response.data])
-            }else{
+                setSubItems((prevItems) => [...prevItems, response.data])
+            } else {
                 Alert.alert("Algo ocurrio.")
             }
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 Alert.alert(error.response.data.error);
-              }
+            }
         }
     }
 
-    return (
-        <View style={styles.centeredView}>
+    const changeValue = (key: keyof SubItemDataCreate, value: string | number) => {
+        setSubItem({
+            ...subItem,
+            [key]: value,
+        });
+    };
+  return (
+    <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                <Text style={styles.modalText}>Crea una actividad!</Text>
+                <Text style={styles.modalText}>Crea una subactividad!</Text>
                 <View style={styles.formContainer}>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -68,7 +74,7 @@ export default function BudgetForm({changeModalVisible, budgetId, setItems}: Bud
                             onChangeText={(e) => {
                                 changeValue("description", e);
                             }}
-                            value={item?.description}
+                            value={subItem?.description}
                             placeholder="Descripción"
                             keyboardType="default"
                             autoCapitalize="sentences"
@@ -78,11 +84,35 @@ export default function BudgetForm({changeModalVisible, budgetId, setItems}: Bud
                         <TextInput
                             style={styles.input}
                             onChangeText={(e) => {
+                                changeValue("unit", e);
+                            }}
+                            value={subItem?.unit}
+                            placeholder="Unidad"
+                            keyboardType="default"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("quantity", e);
+                            }}
+                            value={subItem?.quantity}
+                            placeholder="Cantidad"
+                            keyboardType="number-pad"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
                                 changeValue("amount", e);
                             }}
-                            value={item?.amount}
+                            value={subItem?.amount}
                             placeholder="Presupuesto"
-                            keyboardType="number-pad"
+                            keyboardType="decimal-pad"
                             autoCapitalize="sentences"
                         />
                     </View>
@@ -92,24 +122,24 @@ export default function BudgetForm({changeModalVisible, budgetId, setItems}: Bud
                             onChangeText={(e) => {
                                 changeValue("incidence", e);
                             }}
-                            value={item?.incidence}
-                            placeholder="incidencia"
+                            value={subItem?.incidence}
+                            placeholder="Incidencia"
                             keyboardType="decimal-pad"
                             autoCapitalize="sentences"
                         />
                     </View>
-                    
+
 
                 </View>
 
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => { changeModalVisible(); handleSubmit() }}>
-                    <Text style={styles.textStyle}>Crear actividad.</Text>
+                    <Text style={styles.textStyle}>Crear subactividad.</Text>
                 </Pressable>
             </View>
         </View>
-    )
+  )
 }
 
 const styles = StyleSheet.create({

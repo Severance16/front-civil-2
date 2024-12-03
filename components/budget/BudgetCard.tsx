@@ -1,85 +1,63 @@
-import { ItemData } from "@/types";
-import { formatCurrency } from "@/utils/currencyParser";
-import { router } from "expo-router";
-import React from "react";
-import { StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { router } from 'expo-router'
+import { StyleSheet, TouchableNativeFeedback } from 'react-native'
+import { Text, View } from 'react-native'
 
-type BudgetCardProps = {
-  item: ItemData;
-  order: number;
-};
+interface BudgetCardProps {
+    type: string
+    exist: boolean
+    budgetId: number | null
+}
 
+type IconType = "ray-start" | "ray-end" | "eye-outline"
 
-export default function BudgetCard({ item, order }: BudgetCardProps) {
+export default function BudgetCard({ type, exist, budgetId }: BudgetCardProps) {
 
-  const handlePress = () => {
-    router.push(`/(app)/(project)/(budget)/(item)?itemId=${item.id}`)
-  }
-  return (
-    <TouchableNativeFeedback onPress={handlePress}>
-      <View style={styles.container}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ flex: 1 }}>
-            <Text style={[styles.description]}>{item.description}</Text>
-          </View>
-          <View style={{ flex: 1, paddingRight: 20}}>
-            <Text style={{ textAlign: "right"}}>N. {order + 1}</Text>
-          </View>
-        </View>
-
-        <View style={styles.rowContainer}>
-          <View style={styles.datagroup}>
-            <Text style={styles.label}>Presupuesto</Text>
-            <Text style={styles.data}>{formatCurrency(item.amount)}</Text>
-          </View>
-
-          <View style={styles.datagroup}>
-            <Text style={styles.label}>Incidencia</Text>
-            <Text style={styles.data}>{item.incidence} %</Text>
-          </View>
-        </View>
-      </View>
-    </TouchableNativeFeedback>
-  );
+    const icon = (): IconType => {
+        let selected: IconType = "eye-outline"
+        if (!exist) {
+            selected = type === "Inicial" ? "ray-start" : "ray-end"
+        }
+        return selected
+    }
+    const handleBudget = () => {
+        router.push(`/(app)/(project)/(budget)?type=${type}&budgetId=${budgetId}`)
+    }
+    return (
+        <TouchableNativeFeedback onPress={handleBudget} >
+            <View style={styles.container}>
+                <Text style={styles.label}>{type}</Text>
+                <MaterialCommunityIcons name={icon()} size={24} color="#EFAD29" />
+                <Text style={styles.action}>{!exist ? "Crear" : "Ver"}</Text>
+            </View>
+        </TouchableNativeFeedback>
+    )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#FFF",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
+    container: {
+        width: 90,
+        height: 90,
+        backgroundColor: "#FFF",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 1,
     },
-    shadowOpacity: 0.18,
-    shadowRadius: 10,
-    elevation: 1,
-    padding: 10,
-    gap: 10,
-  },
-  description: {
-    color: "#F1C16D",
-    fontSize: 25,
-    fontWeight: "900",
-    textAlign: "center"
-    // width: 100,
-  },
-  rowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  datagroup: {
-    // width: "auto"
-    flex: 1,
-  },
-  label: {
-    fontWeight: 500,
-    color: "#F1C16D",
-    textAlign: "center",
-  },
-  data: {
-    textAlign: "center",
-    color: "#262829",
-  },
-});
+    label: {
+        color: "#262829",
+        fontWeight: 500
+    },
+    action: {
+        color: "#5B5B5E",
+        fontSize: 12
+    }
+})

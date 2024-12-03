@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Image } from 'expo-image';
 import ProjectInformation from "@/components/project/ProjectInformation";
-import ProjectBudgetCard from "@/components/project/ProjectBudgetCard";
 import { isAxiosError } from "axios";
+import BudgetCard from "@/components/budget/BudgetCard";
 
 type BudgetInfo = {
   exist: boolean,
@@ -71,7 +71,7 @@ export default function Project() {
         <Text style={styles.tittle}>Presupuestos</Text>
         <View style={styles.containerBudget}>
           {Object.keys(budget).map((budgetState, index) => (
-            <ProjectBudgetCard key={index} type={budgetState} exist={budget[budgetState].exist} budgetId={budget[budgetState].id} />
+            <BudgetCard key={index} type={budgetState} exist={budget[budgetState].exist} budgetId={budget[budgetState].id} />
           ))}
         </View>
       </View>
