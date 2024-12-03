@@ -134,6 +134,65 @@ export const subItemsSchema = z.array(
   })
 )
 
-type SubIten = z.infer<typeof subItemSchema>
+type SubItem = z.infer<typeof subItemSchema>
 
-export type SubItemData = Pick<SubIten, "id" | "description" | "unit" | "quantity" | "amount" | "incidence">
+export type SubItemData = Pick<SubItem, "id" | "description" | "unit" | "quantity" | "amount" | "incidence">
+
+export const progressSchema = z.object({
+  id: z.number(),
+  consecutive: z.string(),
+  activity: z.string(),
+  description: z.string(),
+  evidence: z.string(),
+  createdAt: z.string()
+})
+
+export const progressListSchema = z.array(
+  progressSchema.pick({
+    id: true,
+    consecutive: true,
+    activity: true,
+    description: true,
+    evidence: true,
+    createdAt: true
+  })
+)
+
+type Progress = z.infer<typeof progressSchema>
+export type ProgressData = Pick<Progress, "id" | "description" | "consecutive" | "activity" | "evidence" | "createdAt">
+
+export const mishapSchema = z.object({
+  id: z.number(),
+  consecutive: z.string(),
+  activity: z.string(),
+  description: z.string(),
+  evidence: z.string(),
+  createdAt: z.string(),
+})
+
+export const mishapsSchema = z.array(
+  mishapSchema.pick({
+    id: true,
+    consecutive: true,
+    activity: true,
+    description: true,
+    evidence: true,
+    createdAt: true
+  })
+)
+
+type Mishap = z.infer<typeof mishapSchema>
+export type MishapData = Pick<Mishap, "id" | "description" | "consecutive" | "activity" | "evidence" | "createdAt">
+
+export const reportSchema = z.object({
+  id: z.number(),
+  consecutive: z.string(),
+  activity: z.string(),
+  description: z.string(),
+  evidence: z.string(),
+  createdAt: z.string()
+})
+
+type Report = z.infer<typeof reportSchema>
+export type ReportData = Pick <Report, "id" | "activity" | "consecutive" | "description" | "evidence" | "createdAt">
+export type ReportType = "mishap" | "progress"
