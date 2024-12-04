@@ -8,10 +8,15 @@ import ReportTypeButton from '@/components/report/ReportTypeButton'
 import useProject from '@/hooks/useProject'
 import { MishapData, mishapsSchema, ProgressData, progressListSchema, ReportType } from '@/types'
 import { isAxiosError } from 'axios'
+import { useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function Report() {
+  const {type: typeParams, reportId: reportIdParams} = useLocalSearchParams<{
+    type: string,
+    reportId: string
+  }>()
   const { projectId } = useProject()
 
   const [type, setType] = useState<ReportType>("progress")
@@ -48,28 +53,34 @@ export default function Report() {
     setModalVisible(!modalVisible)
   }
 
+  const validateItems = () => {
+    if (type === "mishap") {
+      return mishaps.length > 0
+    } else if (type === "progress") {
+      return progress.length > 0
+    } else {
+      return false
+    }
+  }
+
   useEffect(() => {
     getData()
-  }, [projectId])
+  }, [projectId, typeParams, reportIdParams])
+
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.tittle}>Reportes</Text>
+      <Text style={styles.textInfo}>Escoge el tipo de reporte que deseas ver!</Text>
       <ReportTypeButton type={type} action={changeType} />
+      <Text style={styles.textInfo}>{validateItems() ? `Acá tienes la lista de ${type === "progress" ? "avances" : "percances"}.` : `No hay registros de ${type === "progress" ? "avances" : "percances"}.`}</Text>
       <ScrollView>
-        <View style={{flex: 1, gap: 10}}>
+        <View style={{ flex: 1, gap: 10, }}>
           {type === 'mishap' ? (
-            mishaps.length > 0 ? (
-              mishaps.map(mishap => <ReportCard key={mishap.id} data={mishap} />)
-            ) : (
-              <Text>No hay registros de incidentes</Text>
-            )
+            mishaps.map(mishap => <ReportCard key={mishap.id} data={mishap} type={type} />)
           ) : (
-            progress.length > 0 ? (
-              progress.map(progressState => <ReportCard key={progressState.id} data={progressState} />)
-            ) : (
-              <Text>No hay registros de avances</Text>
-            )
+            progress.map(progressState => <ReportCard key={progressState.id} data={progressState} type={type} />)
           )}
         </View>
       </ScrollView>
@@ -94,5 +105,9 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: "#EFAD29",
     textAlign: "center"
+  },
+  textInfo: {
+    textAlign: "center",
+    color: "#5B5B5E"
   }
 })

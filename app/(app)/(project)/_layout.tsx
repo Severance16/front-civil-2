@@ -1,11 +1,16 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import Constants from "expo-constants";
 
 export default function ProjectLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#F1C16D"
+        tabBarActiveTintColor: "#F1C16D",
+        headerShown: false,
+        sceneStyle: {
+          paddingTop: Constants.statusBarHeight,
+        }
       }}
     >
       <Tabs.Screen
@@ -55,6 +60,11 @@ export default function ProjectLayout() {
       <Tabs.Screen
         name="(budget)/(item)/index"
         options={{ href: null, title: "Presupuesto" }}
+      />
+      <Tabs.Screen
+        name="(report)/index"
+        options={{ href: null, title: "Presupuesto"}}
+        
       />
     </Tabs>
   );

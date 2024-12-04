@@ -30,7 +30,7 @@ export interface ProjectCreate {
     "Hidrahulica" | null
 }
 
-export default function ProjectForm({ changeModalVisible, setProjectsDashBoard}: ProjectFormProps) {
+export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }: ProjectFormProps) {
 
     const [project, setProject] = useState<ProjectCreate>({
         address: "",
@@ -47,7 +47,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard}:
 
     const handleSubmit = async () => {
         try {
-            const {name, owner, license, address, workType, startDate} = project
+            const { name, owner, license, address, workType, startDate } = project
             if ([name, owner, license, address, startDate].includes("") || !workType) {
                 Alert.alert("El projecto no cumple con la información mínima obligatoria.")
                 return
@@ -64,17 +64,19 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard}:
             })
             const response = createProjectSchema.safeParse(data)
             if (response.success) {
-                const budgetInicial = clientAxios.post(`project/${response.data.id}/budget`, {type: "Inicial"})
-                const budgetFinal = clientAxios.post(`project/${response.data.id}/budget`, {type: "Final"})
-                await Promise.all([budgetInicial, budgetFinal])
+                //Todo: validar la creacion de todo esto
+                const budgetInicial = clientAxios.post(`project/${response.data.id}/budget`, { type: "Inicial" })
+                const budgetFinal = clientAxios.post(`project/${response.data.id}/budget`, { type: "Final" })
+                const inventoryCreate = clientAxios.post(`project/${response.data.id}/inventory`)
+                await Promise.all([budgetInicial, budgetFinal, inventoryCreate])
                 setProjectsDashBoard((prevItems) => [...prevItems, response.data])
-            }else{
+            } else {
                 Alert.alert("Algo ocurrio.")
             }
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 Alert.alert(error.response.data.error);
-              }
+            }
         }
     }
 
@@ -165,7 +167,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard}:
                         />
                     </View>
                     <View style={styles.inputContainerSelect}>
-                        <ProjectTypePicker changeValue={changeValue}/>
+                        <ProjectTypePicker changeValue={changeValue} />
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput

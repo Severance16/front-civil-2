@@ -7,5 +7,5 @@ export const formatDate = (date: string): string => {
 }
 
 export const formatDateLabel = (date: string): string => {
-    return format(new Date(date), "dd-MM-yyyy")
+    return format(new Date(date), "dd/MM/yyyy")
 }
