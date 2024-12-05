@@ -196,3 +196,68 @@ export const reportSchema = z.object({
 type Report = z.infer<typeof reportSchema>
 export type ReportData = Pick <Report, "id" | "activity" | "consecutive" | "description" | "evidence" | "createdAt">
 export type ReportType = "mishap" | "progress"
+
+
+
+export const toolSchema = z.object({
+  id: z.number(),
+  numberArticle: z.string(),
+  description: z.string(),
+  quantity: z.number(),
+  place: z.string().nullable(),
+  condition: z.string(),
+  serviceTime: z.number().nullable(),
+  purchaseDate: z.string(),
+  unitValue: z.number()
+})
+
+export const toolsSchema = z.array(
+  toolSchema.pick({
+    id: true,
+    numberArticle: true,
+    description: true,
+    quantity: true,
+    place: true,
+    condition: true,
+    serviceTime: true,
+    purchaseDate: true,
+    unitValue: true
+  })
+)
+
+type Tool = z.infer<typeof toolSchema>
+export type ToolData = Pick<Tool, "id" | "numberArticle" | "description" | "unitValue" | "purchaseDate" | "quantity" | "place" | "condition" | "serviceTime">
+
+export const inputSchema = z.object({
+  id: z.number(),
+  numberArticle: z.string(),
+  description: z.string(),
+  unit: z.string().nullable(),
+  quantity: z.number(),
+  purchaseDate: z.string().nullable(),
+  unitValue: z.number()
+})
+
+export const inputsSchema = z.array(
+  inputSchema.pick({
+    id: true,
+    numberArticle: true,
+    description: true,
+    unit: true,
+    quantity: true,
+    purchaseDate: true,
+    unitValue: true
+  })
+)
+
+type Input = z.infer<typeof inputSchema>
+export type InputData = Pick<Input, "id" | "numberArticle" | "description" | "purchaseDate" | "unitValue" | "quantity" | "unit">
+
+export const inventoryData = z.object({
+  id: z.number(),
+  projectId: projectsSchema.shape.id,
+  inputs: inputsSchema,
+  tools: toolsSchema
+})
+
+export type InventoryType = "input" | "tool"

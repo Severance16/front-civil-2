@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import Constants from "expo-constants";
 
 export default function ProjectLayout() {
@@ -55,15 +55,20 @@ export default function ProjectLayout() {
       />
       <Tabs.Screen
         name="(budget)/index"
-        options={{ href: null, title: "Presupuesto" }}
+        options={{ href: null }}
       />
       <Tabs.Screen
         name="(budget)/(item)/index"
-        options={{ href: null, title: "Presupuesto" }}
+        options={{ href: null }}
       />
       <Tabs.Screen
         name="(report)/index"
-        options={{ href: null, title: "Presupuesto"}}
+        options={{ href: null }}
+        
+      />
+      <Tabs.Screen
+        name="(inventory)/index"
+        options={{ href: null }}
         
       />
     </Tabs>
