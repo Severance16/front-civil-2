@@ -1,6 +1,7 @@
 import clientAxios from '@/clients/clientAxios'
 import FloatButton from '@/components/general/FloatButton'
 import ModalGeneral from '@/components/general/ModalGeneral'
+import InputCard from '@/components/input/InputCard'
 import InputForm from '@/components/input/InputForm'
 import InventoryTypeButton from '@/components/inventory/InventoryTypeButton'
 import ToolForm from '@/components/tool/ToolForm'
@@ -110,7 +111,7 @@ export default function Inventory() {
             <ScrollView>
                 <View style={{ flex: 1, gap: 10, }}>
                     {type === 'input' ? (
-                        inputs.map(input => <View key={input.id}><Text>{input.description}</Text></View>)
+                        inputs.map(input => <InputCard key={input.id} input={input} />)
                     ) : (
                         tools.map(tool => <View key={tool.id}><Text>{tool.description}</Text></View>)
                     )}

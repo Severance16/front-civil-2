@@ -23,7 +23,7 @@ export default function ProjectInformation({ project }: ProjectInformationProps)
 
             <View>
                 <Text style={[styles.label, { textAlign: "center" }]}>Propietario</Text>
-                <Text style={styles.dataOwnerProject}>{project.owner} Daniel Chacón Perez</Text>
+                <Text style={styles.dataOwnerProject}>{project.owner}</Text>
             </View>
 
             <View style={styles.rowContainer}>

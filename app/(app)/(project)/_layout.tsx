@@ -67,7 +67,12 @@ export default function ProjectLayout() {
         
       />
       <Tabs.Screen
-        name="(inventory)/index"
+        name="(inventory)/(input)/index"
+        options={{ href: null }}
+        
+      />
+      <Tabs.Screen
+        name="(inventory)/(tool)/index"
         options={{ href: null }}
         
       />
