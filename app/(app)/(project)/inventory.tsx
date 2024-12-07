@@ -4,6 +4,7 @@ import ModalGeneral from '@/components/general/ModalGeneral'
 import InputCard from '@/components/input/InputCard'
 import InputForm from '@/components/input/InputForm'
 import InventoryTypeButton from '@/components/inventory/InventoryTypeButton'
+import ToolCard from '@/components/tool/ToolCard'
 import ToolForm from '@/components/tool/ToolForm'
 import useProject from '@/hooks/useProject'
 import { InputData, inventoryData, InventoryType, ToolData } from '@/types'
@@ -18,10 +19,11 @@ const toolsExample: ToolData[] = [
         description: "Pala",
         condition: "Buen estado",
         place: "Plazoleta",
-        purchaseDate: "2024-12-05T09:35:23.456",
+        purchaseDate: "2024-11-30 16:52:56.166",
         quantity: 10,
         serviceTime: 6,
-        unitValue: 80000
+        unitValue: 80000,
+        createdAt: "2024-11-30 16:52:56.166"
     },
     {
         id: 1,
@@ -29,10 +31,11 @@ const toolsExample: ToolData[] = [
         description: "Pala 2",
         condition: "Mal estado",
         place: "Plazoleta 2",
-        purchaseDate: "2024-12-05T09:35:23.456",
+        purchaseDate: "2024-11-30 16:52:56.166",
         quantity: 5,
         serviceTime: 1,
-        unitValue: 80000
+        unitValue: 80000,
+        createdAt: "2024-11-30 16:52:56.166"
     }
 ]
 const inputsExample: InputData[] = [
@@ -42,8 +45,9 @@ const inputsExample: InputData[] = [
         description: "Ladrillos",
         unit: "Unidad",
         quantity: 300,
-        purchaseDate: "2024-12-05T09:35:23.456",
-        unitValue: 1200
+        purchaseDate: "2024-11-30 16:52:56.166",
+        unitValue: 1200,
+        createdAt: "2024-11-30 16:52:56.166"
     },
     {
         id: 1,
@@ -51,16 +55,17 @@ const inputsExample: InputData[] = [
         description: "Arena",
         unit: "Metros",
         quantity: 20,
-        purchaseDate: "2024-12-05T09:35:23.456",
-        unitValue: 6000
+        purchaseDate: "2024-11-30 16:52:56.166",
+        unitValue: 6000,
+        createdAt: "2024-11-30 16:52:56.166"
     }
 ]
 
 export default function Inventory() {
     const { projectId } = useProject()
     const [type, setType] = useState<InventoryType>("input")
-    const [tools, setTools] = useState<ToolData[]>(toolsExample)
-    const [inputs, setInputs] = useState<InputData[]>(inputsExample)
+    const [tools, setTools] = useState<ToolData[]>([])
+    const [inputs, setInputs] = useState<InputData[]>([])
     const [inventoryId, setInventoryId] = useState<number>(9999999999)
     const [modalVisible, setModalVisible] = useState<boolean>(false)
 
@@ -68,11 +73,11 @@ export default function Inventory() {
         try {
             const { data } = await clientAxios(`/project/${projectId}/inventory-s`)
             const response = inventoryData.safeParse(data)
-            // if (response.success) {
-            //     setTools(response.data.tools)
-            //     setInputs(response.data.inputs)
-            //     setInventoryId(response.data.id)
-            // }
+            if (response.success) {
+                setTools(response.data.tools)
+                setInputs(response.data.inputs)
+                setInventoryId(response.data.id)
+            }
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 Alert.alert(error.response.data.error);
@@ -113,7 +118,7 @@ export default function Inventory() {
                     {type === 'input' ? (
                         inputs.map(input => <InputCard key={input.id} input={input} />)
                     ) : (
-                        tools.map(tool => <View key={tool.id}><Text>{tool.description}</Text></View>)
+                        tools.map(tool => <ToolCard key={tool.id} tool={tool}/>)
                     )}
                 </View>
             </ScrollView>

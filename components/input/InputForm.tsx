@@ -1,6 +1,10 @@
-import { InputData, InventoryType } from '@/types';
-import React from 'react'
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import clientAxios from '@/clients/clientAxios';
+import { InputData, inputSchema, InventoryType } from '@/types';
+import { generateConsecutiveInventory } from '@/utils/consecutiveGenerator';
+import { formatDate } from '@/utils/dateParser';
+import { isAxiosError } from 'axios';
+import React, { useState } from 'react'
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 type InputFormProps = {
     inventoryId: number | null
@@ -8,11 +12,57 @@ type InputFormProps = {
     changeModalVisible: () => void
 }
 
+type InputDataCreate = {
+    numberArticle: string,
+    description: string,
+    unit: string,
+    quantity: string, //Number
+    purchaseDate: string,
+    unitValue: string, //Number
+}
+
+const inputInit: InputDataCreate = {
+    numberArticle: "",
+    description: "",
+    unit: "",
+    quantity: "",
+    purchaseDate: "",
+    unitValue: ""
+}
 export default function InputForm({inventoryId, changeModalVisible, setInputs}: InputFormProps) {
 
-    const handleSubmit = () => {
-        console.log("Crear Insumo")
+    const [input, setInput] = useState<InputDataCreate>(inputInit)
+
+    const handleSubmit = async () => {
+        try {
+            const { data } = await clientAxios.post(`/project/inventory/${inventoryId}/input`,{
+                ...input,
+                numberArticle: generateConsecutiveInventory("input"),
+                quantity: parseFloat(input.quantity),
+                unitValue: parseFloat(input.unitValue),
+                purchaseDate: formatDate(input.purchaseDate)
+            })
+            const response = inputSchema.safeParse(data)
+            if (response.success) {
+                setInputs((prevItems) => [...prevItems, response.data])
+            }else{
+                Alert.alert("Algo Ocurrio.")
+            }
+        } catch (error) {
+            console.log(error)
+            if (isAxiosError(error) && error.response) {
+                Alert.alert(error.response.data.error);
+            }
+        }
     }
+
+    const changeValue = (key: keyof InputDataCreate, value: string | number) => {
+        setInput({
+            ...input,
+            [key]: value,
+        });
+    };
+
     return (
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -21,11 +71,11 @@ export default function InputForm({inventoryId, changeModalVisible, setInputs}: 
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("activity", e);
-                            // }}
-                            // value={report?.activity}
-                            placeholder="Actividad"
+                            onChangeText={(e) => {
+                                changeValue("description", e);
+                            }}
+                            value={input?.description}
+                            placeholder="Insumo"
                             keyboardType="default"
                             autoCapitalize="sentences"
                         />
@@ -33,15 +83,49 @@ export default function InputForm({inventoryId, changeModalVisible, setInputs}: 
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            multiline
-                            numberOfLines={5}
-                            // onChangeText={(e) => {
-                            //     changeValue("description", e);
-                            // }}
-                            // value={report?.description}
-                            placeholder="Descripción"
+                            onChangeText={(e) => {
+                                changeValue("purchaseDate", e);
+                            }}
+                            value={input?.purchaseDate}
+                            placeholder="Fecha de compra (DD/MM/YY)"
                             keyboardType="default"
-                            textAlignVertical='top'
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("unit", e);
+                            }}
+                            value={input?.unit}
+                            placeholder="Unidad"
+                            keyboardType="default"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("unitValue", e);
+                            }}
+                            value={input?.unitValue}
+                            placeholder="Valor unitario"
+                            keyboardType="default"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("quantity", e);
+                            }}
+                            value={input?.quantity}
+                            placeholder="Cantidad"
+                            keyboardType="default"
+                            autoCapitalize="sentences"
                         />
                     </View>
                 </View>

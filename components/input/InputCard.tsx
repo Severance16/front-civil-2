@@ -1,4 +1,6 @@
 import { InputData, InventoryType } from '@/types'
+import { formatDateLabel } from '@/utils/dateParser'
+import { router } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native'
 
@@ -6,22 +8,27 @@ type InputCardProps = {
   input: InputData
 }
 export default function InputCard({ input }: InputCardProps) {
+
+  const handlePress = () => {
+    router.push(`/(app)/(project)/(inventory)/(input)?inputId=${input.id}`)
+  }
+  
   return (
-    <TouchableNativeFeedback>
+    <TouchableNativeFeedback onPress={handlePress}>
       <View style={styles.container}>
         <View style={styles.rowGroup}>
           <Text style={styles.textHeader}>{input.numberArticle}</Text>
-          <Text style={styles.textHeader}>CreatedAt</Text>
+          <Text style={styles.textHeader}>{formatDateLabel(input.createdAt)}</Text>
         </View>
         <Text style={styles.description}>{input.description}</Text>
 
         <View style={styles.rowGroupItems}>
-          <View>
+          <View style={{width: 181}}>
             <Text style={styles.label}>Unidad</Text>
             <Text style={styles.info}>{input.unit}</Text>
           </View>
 
-          <View>
+          <View style={{width: 181}}>
             <Text style={styles.label}>Cantidad</Text>
             <Text style={styles.info}>{input.quantity}</Text>
           </View>

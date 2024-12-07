@@ -208,7 +208,8 @@ export const toolSchema = z.object({
   condition: z.string(),
   serviceTime: z.number().nullable(),
   purchaseDate: z.string(),
-  unitValue: z.number()
+  unitValue: z.number(),
+  createdAt: z.string()
 })
 
 export const toolsSchema = z.array(
@@ -221,12 +222,13 @@ export const toolsSchema = z.array(
     condition: true,
     serviceTime: true,
     purchaseDate: true,
-    unitValue: true
+    unitValue: true,
+    createdAt: true
   })
 )
 
 type Tool = z.infer<typeof toolSchema>
-export type ToolData = Pick<Tool, "id" | "numberArticle" | "description" | "unitValue" | "purchaseDate" | "quantity" | "place" | "condition" | "serviceTime">
+export type ToolData = Pick<Tool, "id" | "numberArticle" | "description" | "unitValue" | "purchaseDate" | "quantity" | "place" | "condition" | "serviceTime" | "createdAt">
 
 export const inputSchema = z.object({
   id: z.number(),
@@ -235,7 +237,8 @@ export const inputSchema = z.object({
   unit: z.string().nullable(),
   quantity: z.number(),
   purchaseDate: z.string().nullable(),
-  unitValue: z.number()
+  unitValue: z.number(),
+  createdAt: z.string()
 })
 
 export const inputsSchema = z.array(
@@ -246,12 +249,13 @@ export const inputsSchema = z.array(
     unit: true,
     quantity: true,
     purchaseDate: true,
-    unitValue: true
+    unitValue: true,
+    createdAt: true
   })
 )
 
 type Input = z.infer<typeof inputSchema>
-export type InputData = Pick<Input, "id" | "numberArticle" | "description" | "purchaseDate" | "unitValue" | "quantity" | "unit">
+export type InputData = Pick<Input, "id" | "numberArticle" | "description" | "purchaseDate" | "unitValue" | "quantity" | "unit" | "createdAt">
 
 export const inventoryData = z.object({
   id: z.number(),

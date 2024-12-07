@@ -64,7 +64,6 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
             })
             const response = createProjectSchema.safeParse(data)
             if (response.success) {
-                //Todo: validar la creacion de todo esto
                 const budgetInicial = clientAxios.post(`project/${response.data.id}/budget`, { type: "Inicial" })
                 const budgetFinal = clientAxios.post(`project/${response.data.id}/budget`, { type: "Final" })
                 const inventoryCreate = clientAxios.post(`project/${response.data.id}/inventory`)
@@ -176,7 +175,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
                                 changeValue("startDate", e);
                             }}
                             value={project?.startDate}
-                            placeholder="Inicio (DD-MM-YY)"
+                            placeholder="Inicio (DD/MM/YY)"
                             keyboardType="default"
                             autoCapitalize="sentences"
                         />
@@ -189,7 +188,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
                                 changeValue("endDate", e);
                             }}
                             value={project?.endDate}
-                            placeholder="Fin (DD-MM-YY)"
+                            placeholder="Fin (DD/MM/YY)"
                             // keyboardType="default"
                             autoCapitalize="sentences"
                         />
