@@ -1,5 +1,6 @@
 import { ToolData } from '@/types'
 import { formatDateLabel } from '@/utils/dateParser'
+import { router } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native'
 
@@ -8,8 +9,13 @@ type ToolCardProps = {
 }
 
 export default function ToolCard({ tool }: ToolCardProps) {
+
+  const handlePress = () => {
+    router.push(`/(app)/(project)/(inventory)/(tool)?toolId=${tool.id}`)
+  }
+
   return (
-    <TouchableNativeFeedback>
+    <TouchableNativeFeedback onPress={handlePress}>
       <View style={styles.container}>
         <View style={styles.rowGroup}>
           <Text style={styles.textHeader}>{tool.numberArticle}</Text>

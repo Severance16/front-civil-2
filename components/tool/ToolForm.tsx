@@ -1,6 +1,9 @@
-import { InventoryType, ToolData } from '@/types';
-import React from 'react'
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import clientAxios from '@/clients/clientAxios';
+import { InventoryType, ToolData, toolSchema } from '@/types';
+import { formatDate } from '@/utils/dateParser';
+import { isAxiosError } from 'axios';
+import React, { useState } from 'react'
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 type ToolFormProps = {
     inventoryId: number | null
@@ -8,11 +11,61 @@ type ToolFormProps = {
     changeModalVisible: () => void
 }
 
+type ToolDataCreate = {
+    numberArticle: string
+    description: string
+    quantity: string //number
+    place: string
+    condition: string
+    serviceTime: string //number
+    purchaseDate: string
+    unitValue: string //number
+}
+
+const toolInit: ToolDataCreate = {
+    numberArticle: "",
+    description: "",
+    quantity: "",
+    place: "",
+    condition: "",
+    serviceTime: "",
+    purchaseDate: "",
+    unitValue: ""
+}
+
 export default function ToolForm({inventoryId, changeModalVisible, setTools}: ToolFormProps) {
 
-    const handleSubmit = () => {
-        console.log("Crear Herramienta")
+    const [tool, setTool] = useState<ToolDataCreate>(toolInit)
+    const handleSubmit = async () => {
+        try {
+            const { data } = await clientAxios.post(`/project/inventory/${inventoryId}/tool`,{
+                ...tool,
+                purchaseDate: formatDate(tool.purchaseDate),
+                quantity: parseFloat(tool.quantity),
+                serviceTime: parseInt(tool.serviceTime),
+                unitValue: parseFloat(tool.unitValue)
+            })
+            const response = toolSchema.safeParse(data)
+            if (response.success) {
+                setTools((prevItems) => [...prevItems, response.data])
+            }else{
+                Alert.alert("Algo Ocurrio.")
+            }
+        } catch (error) {
+            console.log(error)
+            if (isAxiosError(error) && error.response) {
+                Alert.alert(error.response.data.error);
+            }
+        }
     }
+
+    const changeValue = (key: keyof ToolDataCreate, value: string | number) => {
+        setTool({
+            ...tool,
+            [key]: value,
+        });
+    };
+
     return (
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -21,11 +74,11 @@ export default function ToolForm({inventoryId, changeModalVisible, setTools}: To
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            // onChangeText={(e) => {
-                            //     changeValue("activity", e);
-                            // }}
-                            // value={report?.activity}
-                            placeholder="Actividad"
+                            onChangeText={(e) => {
+                                changeValue("description", e);
+                            }}
+                            value={tool?.description}
+                            placeholder="Herramienta"
                             keyboardType="default"
                             autoCapitalize="sentences"
                         />
@@ -33,15 +86,73 @@ export default function ToolForm({inventoryId, changeModalVisible, setTools}: To
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            multiline
-                            numberOfLines={5}
-                            // onChangeText={(e) => {
-                            //     changeValue("description", e);
-                            // }}
-                            // value={report?.description}
-                            placeholder="Descripción"
+                            onChangeText={(e) => {
+                                changeValue("purchaseDate", e);
+                            }}
+                            value={tool?.purchaseDate}
+                            placeholder="Fecha de compra (DD-MM-YY)"
                             keyboardType="default"
-                            textAlignVertical='top'
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("condition", e);
+                            }}
+                            value={tool?.condition}
+                            placeholder="Condicion"
+                            keyboardType="default"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("quantity", e);
+                            }}
+                            value={tool?.quantity}
+                            placeholder="Cantidad"
+                            keyboardType="numeric"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("serviceTime", e);
+                            }}
+                            value={tool?.serviceTime}
+                            placeholder="Tiempo en servicio"
+                            keyboardType="numeric"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("unitValue", e);
+                            }}
+                            value={tool?.unitValue}
+                            placeholder="Valor unitario"
+                            keyboardType="numeric"
+                            autoCapitalize="sentences"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(e) => {
+                                changeValue("place", e);
+                            }}
+                            value={tool?.place}
+                            placeholder="Condición"
+                            keyboardType="default"
+                            autoCapitalize="sentences"
                         />
                     </View>
                 </View>

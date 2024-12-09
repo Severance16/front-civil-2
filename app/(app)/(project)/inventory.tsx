@@ -12,55 +12,6 @@ import { isAxiosError } from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 
-const toolsExample: ToolData[] = [
-    {
-        id: 0,
-        numberArticle: "TL001",
-        description: "Pala",
-        condition: "Buen estado",
-        place: "Plazoleta",
-        purchaseDate: "2024-11-30 16:52:56.166",
-        quantity: 10,
-        serviceTime: 6,
-        unitValue: 80000,
-        createdAt: "2024-11-30 16:52:56.166"
-    },
-    {
-        id: 1,
-        numberArticle: "TL002",
-        description: "Pala 2",
-        condition: "Mal estado",
-        place: "Plazoleta 2",
-        purchaseDate: "2024-11-30 16:52:56.166",
-        quantity: 5,
-        serviceTime: 1,
-        unitValue: 80000,
-        createdAt: "2024-11-30 16:52:56.166"
-    }
-]
-const inputsExample: InputData[] = [
-    {
-        id: 0,
-        numberArticle: "IT001",
-        description: "Ladrillos",
-        unit: "Unidad",
-        quantity: 300,
-        purchaseDate: "2024-11-30 16:52:56.166",
-        unitValue: 1200,
-        createdAt: "2024-11-30 16:52:56.166"
-    },
-    {
-        id: 1,
-        numberArticle: "IT002",
-        description: "Arena",
-        unit: "Metros",
-        quantity: 20,
-        purchaseDate: "2024-11-30 16:52:56.166",
-        unitValue: 6000,
-        createdAt: "2024-11-30 16:52:56.166"
-    }
-]
-
 export default function Inventory() {
     const { projectId } = useProject()
     const [type, setType] = useState<InventoryType>("input")
