@@ -44,7 +44,7 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
                 incidence: parseFloat(incidence)
             })
             const response = subItemSchema.safeParse(data)
-            console.log(response)
+            // console.log(response)
             if (response.success) {
                 setSubItems((prevItems) => [...prevItems, response.data])
             } else {

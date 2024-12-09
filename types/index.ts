@@ -125,7 +125,7 @@ export const subItemSchema = z.object({
 
 export const subItemsSchema = z.array(
   subItemSchema.pick({
-    id:  true,
+    id: true,
     description: true,
     unit: true,
     quantity: true,
@@ -194,10 +194,8 @@ export const reportSchema = z.object({
 })
 
 type Report = z.infer<typeof reportSchema>
-export type ReportData = Pick <Report, "id" | "activity" | "consecutive" | "description" | "evidence" | "createdAt">
+export type ReportData = Pick<Report, "id" | "activity" | "consecutive" | "description" | "evidence" | "createdAt">
 export type ReportType = "mishap" | "progress"
-
-
 
 export const toolSchema = z.object({
   id: z.number(),
@@ -265,3 +263,69 @@ export const inventoryData = z.object({
 })
 
 export type InventoryType = "input" | "tool"
+
+export type NoteType = "Ingreso" | "Egreso"
+
+const noteSchema = z.object({
+  id: z.number(),
+  date: z.string(),
+  type: z.enum(["Ingreso", "Egreso"]),
+  description: z.string(),
+  quantity: z.number(),
+  createdAt: z.string()
+})
+
+type Note = z.infer<typeof noteSchema>
+export type NoteData = Pick<Note, "createdAt" | "date" | "description" | "id" | "quantity" | "type">
+
+const noteInputSchema = noteSchema.pick({
+  id: true,
+  date: true,
+  type: true,
+  description: true,
+  quantity: true,
+  createdAt: true
+}).extend({
+  inputId: z.number()
+})
+
+export const nostesInputSchema = z.array(
+  noteInputSchema.pick({
+    id: true,
+    date: true,
+    type: true,
+    description: true,
+    quantity: true,
+    createdAt: true,
+    inputId: true
+  })
+)
+
+type NoteInput = z.infer<typeof noteInputSchema>
+export type NoteInputData = Pick<NoteInput, "createdAt" | "date" | "description" | "id" | "inputId" | "quantity" | "type">
+
+const noteToolSchema = noteSchema.pick({
+  id: true,
+  date: true,
+  type: true,
+  description: true,
+  quantity: true,
+  createdAt: true
+}).extend({
+  toolId: z.number()
+})
+
+export const notesToolSchema = z.array(
+  noteToolSchema.pick({
+    id: true,
+    date: true,
+    type: true,
+    description: true,
+    quantity: true,
+    createdAt: true,
+    toolId: true
+  })
+)
+
+type NoteTool = z.infer<typeof noteToolSchema>
+export type NoteTooltData = Pick<NoteTool, "createdAt" | "date" | "description" | "id" | "toolId" | "quantity" | "type">

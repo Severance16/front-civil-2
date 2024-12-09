@@ -1,5 +1,6 @@
 import clientAxios from '@/clients/clientAxios';
 import { InventoryType, ToolData, toolSchema } from '@/types';
+import { generateConsecutiveInventory } from '@/utils/consecutiveGenerator';
 import { formatDate } from '@/utils/dateParser';
 import { isAxiosError } from 'axios';
 import React, { useState } from 'react'
@@ -40,6 +41,7 @@ export default function ToolForm({inventoryId, changeModalVisible, setTools}: To
         try {
             const { data } = await clientAxios.post(`/project/inventory/${inventoryId}/tool`,{
                 ...tool,
+                numberArticle: generateConsecutiveInventory("tool"),
                 purchaseDate: formatDate(tool.purchaseDate),
                 quantity: parseFloat(tool.quantity),
                 serviceTime: parseInt(tool.serviceTime),
@@ -90,7 +92,7 @@ export default function ToolForm({inventoryId, changeModalVisible, setTools}: To
                                 changeValue("purchaseDate", e);
                             }}
                             value={tool?.purchaseDate}
-                            placeholder="Fecha de compra (DD-MM-YY)"
+                            placeholder="Fecha de compra (DD/MM/YY)"
                             keyboardType="default"
                             autoCapitalize="sentences"
                         />
@@ -150,7 +152,7 @@ export default function ToolForm({inventoryId, changeModalVisible, setTools}: To
                                 changeValue("place", e);
                             }}
                             value={tool?.place}
-                            placeholder="Condición"
+                            placeholder="Lugar"
                             keyboardType="default"
                             autoCapitalize="sentences"
                         />
