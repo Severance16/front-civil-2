@@ -1,5 +1,8 @@
 import clientAxios from '@/clients/clientAxios'
+import ModalGeneral from '@/components/general/ModalGeneral'
 import NoteCard from '@/components/note/NoteCard'
+import NoteForm from '@/components/note/NoteForm'
+import ToolEditForm from '@/components/tool/ToolEditForm'
 import ToolInformation from '@/components/tool/ToolInformation'
 import { NoteTooltData, ToolData, toolSchema } from '@/types'
 import { formatDateLabel } from '@/utils/dateParser'
@@ -34,6 +37,8 @@ export default function Tool() {
   const { toolId } = useLocalSearchParams<{ toolId: string }>()
   const [tool, setTool] = useState<ToolData>()
   const [notes, setNotes] = useState<NoteTooltData[]>(notas)
+  const [modalVisible, setModalVisible] = useState(false)
+  const [typeForm, setTypeForm] = useState<"edit" | "create">("edit")
 
   const getInput = async () => {
     if (toolId === undefined || toolId === "" || toolId === null) {
@@ -58,6 +63,19 @@ export default function Tool() {
         Alert.alert(error.response.data.error);
       }
     }
+  }
+
+  const changeModalVisible = () => {
+    setModalVisible(!modalVisible)
+  }
+
+  const handleEditTool = () => {
+    setTypeForm("edit")
+    changeModalVisible()
+  }
+  const handleCreateNote = () => {  
+    setTypeForm("create")
+    changeModalVisible() 
   }
 
   useEffect(() => {
@@ -97,20 +115,24 @@ export default function Tool() {
       <Text style={styles.tittle}>Acciones</Text>
 
       <View style={styles.actionsContainer}>
-        <TouchableNativeFeedback>
-
+        <TouchableNativeFeedback onPress={handleEditTool}>
           <View style={styles.actionButton}>
             <MaterialCommunityIcons name="pencil-outline" size={24} color="#EFAD29" />
             <Text style={{ width: "auto" }}>Editar</Text>
           </View>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={handleCreateNote}>
           <View style={styles.actionButton}>
             <MaterialCommunityIcons name="note-plus-outline" size={24} color="#EFAD29" />
             <Text style={{ width: "auto" }}>Nota</Text>
           </View>
         </TouchableNativeFeedback>
       </View>
+
+      <ModalGeneral changeModalVisible={changeModalVisible} modalVisible={modalVisible}>
+        {typeForm === 'edit' && (<ToolEditForm tool={tool} setTool={setTool} changeModalVisible={changeModalVisible}/>)}
+        {typeForm === "create" && (<NoteForm />)}
+      </ModalGeneral>
     </View>
   )
 }

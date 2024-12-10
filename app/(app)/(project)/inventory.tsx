@@ -9,10 +9,12 @@ import ToolForm from '@/components/tool/ToolForm'
 import useProject from '@/hooks/useProject'
 import { InputData, inventoryData, InventoryType, ToolData } from '@/types'
 import { isAxiosError } from 'axios'
+import { useGlobalSearchParams, useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function Inventory() {
+    const params = useGlobalSearchParams()
     const { projectId } = useProject()
     const [type, setType] = useState<InventoryType>("input")
     const [tools, setTools] = useState<ToolData[]>([])
@@ -56,7 +58,7 @@ export default function Inventory() {
 
     useEffect(() => {
         getInventory()
-    }, [projectId])
+    }, [projectId, params.refresh])
 
     return (
         <View style={styles.container}>
