@@ -232,9 +232,9 @@ export const inputSchema = z.object({
   id: z.number(),
   numberArticle: z.string(),
   description: z.string(),
-  unit: z.string().nullable(),
+  unit: z.string(),
   quantity: z.number(),
-  purchaseDate: z.string().nullable(),
+  purchaseDate: z.string(),
   unitValue: z.number(),
   createdAt: z.string()
 })
@@ -289,7 +289,7 @@ const noteInputSchema = noteSchema.pick({
   inputId: z.number()
 })
 
-export const nostesInputSchema = z.array(
+export const notesInputSchema = z.array(
   noteInputSchema.pick({
     id: true,
     date: true,
@@ -304,7 +304,7 @@ export const nostesInputSchema = z.array(
 type NoteInput = z.infer<typeof noteInputSchema>
 export type NoteInputData = Pick<NoteInput, "createdAt" | "date" | "description" | "id" | "inputId" | "quantity" | "type">
 
-const noteToolSchema = noteSchema.pick({
+export const noteToolSchema = noteSchema.pick({
   id: true,
   date: true,
   type: true,
@@ -326,6 +326,30 @@ export const notesToolSchema = z.array(
     toolId: true
   })
 )
+
+export const noteToolCreateSchema = z.object({
+  tool: toolSchema.pick({
+    condition: true,
+    createdAt: true,
+    description: true,
+    id: true,
+    numberArticle: true,
+    place: true,
+    purchaseDate: true,
+    quantity: true,
+    serviceTime: true,
+    unitValue: true
+  }),
+  note: noteToolSchema.pick({
+    id: true,
+    date: true,
+    type: true,
+    description: true,
+    quantity: true,
+    createdAt: true,
+    toolId: true
+  })
+})
 
 type NoteTool = z.infer<typeof noteToolSchema>
 export type NoteTooltData = Pick<NoteTool, "createdAt" | "date" | "description" | "id" | "toolId" | "quantity" | "type">

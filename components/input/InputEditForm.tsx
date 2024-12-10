@@ -1,36 +1,37 @@
-import clientAxios from '@/clients/clientAxios'
-import { ToolData, toolSchema } from '@/types'
-import { isAxiosError } from 'axios'
-import { router } from 'expo-router'
-import React, { useState } from 'react'
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import clientAxios from "@/clients/clientAxios"
+import { InputData, inputSchema } from "@/types"
+import { isAxiosError } from "axios"
+import { router } from "expo-router"
+import { useState } from "react"
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 
-type ToolEditFormProps = {
-    tool: ToolData
-    setTool: React.Dispatch<React.SetStateAction<ToolData | undefined>>
+type InputEditFormProps = {
+    input: InputData
+    setInput: React.Dispatch<React.SetStateAction<InputData | undefined>>
     changeModalVisible: () => void
 }
 
-const toolDataInit: ToolData = {
+const inputDataInit: InputData = {
     id: 999999,
-    condition: "",
+    // condition: "",
     createdAt: "",
     description: "",
     numberArticle: "",
-    place: "",
+    // place: "",
     purchaseDate: "",
     quantity: 0,
-    serviceTime: 0,
-    unitValue: 0
+    // serviceTime: 0,
+    unitValue: 0,
+    unit: ""
 }
 
-export default function ToolEditForm({ tool, setTool, changeModalVisible }: ToolEditFormProps) {
-    const [toolEdit, setToolEdit] = useState(tool || toolDataInit)
+export default function InputEditForm({ input, setInput, changeModalVisible }: InputEditFormProps) {
+    const [inputEdit, setInputEdit] = useState(input || inputDataInit)
     const [load, setLoad] = useState(false)
 
-    const changeValue = (key: keyof ToolData, value: string | number) => {
-        setToolEdit({
-            ...toolEdit,
+    const changeValue = (key: keyof InputData, value: string | number) => {
+        setInputEdit({
+            ...inputEdit,
             [key]: value,
         });
     };
@@ -38,18 +39,18 @@ export default function ToolEditForm({ tool, setTool, changeModalVisible }: Tool
     const handleSubmit = async () => {
         try {
             setLoad(true)
-            const { data } = await clientAxios.put(`/project/inventory/tool/${toolEdit.id}`, {
-                place: toolEdit.place === "" ? null :  toolEdit.place,
-                condition: toolEdit.condition,
-                description: toolEdit.description,
-                serviceTime: toolEdit.serviceTime, 
-                unitValue: toolEdit.unitValue
+            const { data } = await clientAxios.put(`/project/inventory/input/${inputEdit.id}`, {
+                description: inputEdit.description,
+                unit: inputEdit.unit,
+                unitValue: inputEdit.unitValue
             })
-            const response = toolSchema.safeParse(data)
+            const response = inputSchema.safeParse(data)
             if (response.success) {
-                setTool(response.data)
+                setInput(response.data)
                 router.setParams({refresh: `${Math.random()}}`})
                 changeModalVisible()
+            }else{
+                Alert.alert("Algo sucedio.")
             }
         } catch (error) {
             if (isAxiosError(error) && error.response) {
@@ -63,7 +64,7 @@ export default function ToolEditForm({ tool, setTool, changeModalVisible }: Tool
     return (
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                <Text style={styles.modalText}>Editar herramienta!</Text>
+                <Text style={styles.modalText}>Editar insumo!</Text>
                 <View style={styles.formContainer}>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -71,7 +72,7 @@ export default function ToolEditForm({ tool, setTool, changeModalVisible }: Tool
                             onChangeText={(e) => {
                                 changeValue("description", e);
                             }}
-                            value={toolEdit?.description}
+                            value={inputEdit?.description}
                             placeholder="Descripción"
                             keyboardType="default"
                             autoCapitalize="sentences"
@@ -80,57 +81,25 @@ export default function ToolEditForm({ tool, setTool, changeModalVisible }: Tool
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            multiline
-                            numberOfLines={5}
                             onChangeText={(e) => {
-                                changeValue("place", e);
+                                changeValue("unit", e);
                             }}
-                            value={toolEdit?.place === null ? "" : toolEdit?.place}
-                            placeholder="Lugar"
+                            value={inputEdit?.unit}
+                            placeholder="Unidad"
                             keyboardType="default"
-                            textAlignVertical='top'
+                            autoCapitalize="sentences"
                         />
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            multiline
-                            numberOfLines={5}
-                            onChangeText={(e) => {
-                                changeValue("condition", e);
-                            }}
-                            value={toolEdit?.condition}
-                            placeholder="Condicion"
-                            keyboardType="default"
-                            textAlignVertical='top'
-                        />
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            multiline
-                            numberOfLines={5}
-                            onChangeText={(e) => {
-                                changeValue("serviceTime", e);
-                            }}
-                            value={toolEdit?.serviceTime === null ? "" : toolEdit?.serviceTime.toString()}
-                            placeholder="Tiempo en servicio"
-                            keyboardType="number-pad"
-                            textAlignVertical='top'
-                        />
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            multiline
-                            numberOfLines={5}
                             onChangeText={(e) => {
                                 changeValue("unitValue", e);
                             }}
-                            value={toolEdit?.unitValue.toString()}
+                            value={inputEdit?.unitValue.toString()}
                             placeholder="Valor unitario"
                             keyboardType="number-pad"
-                            textAlignVertical='top'
+                            autoCapitalize="sentences"
                         />
                     </View>
                 </View>
@@ -140,7 +109,7 @@ export default function ToolEditForm({ tool, setTool, changeModalVisible }: Tool
                     onPress={() => { handleSubmit() }}
                     disabled={false}
                 >
-                    <Text style={styles.textStyle}>{load ? "Cargando..." : "Guardar herramienta."}</Text>
+                    <Text style={styles.textStyle}>{load ? "Cargando..." : "Guardar insumo."}</Text>
                 </Pressable>
             </View>
         </View>

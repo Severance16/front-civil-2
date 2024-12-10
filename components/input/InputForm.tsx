@@ -45,6 +45,7 @@ export default function InputForm({inventoryId, changeModalVisible, setInputs}: 
             const response = inputSchema.safeParse(data)
             if (response.success) {
                 setInputs((prevItems) => [...prevItems, response.data])
+                changeModalVisible()
             }else{
                 Alert.alert("Algo Ocurrio.")
             }
@@ -124,7 +125,7 @@ export default function InputForm({inventoryId, changeModalVisible, setInputs}: 
                             }}
                             value={input?.quantity}
                             placeholder="Cantidad"
-                            keyboardType="default"
+                            keyboardType="number-pad"
                             autoCapitalize="sentences"
                         />
                     </View>
@@ -132,7 +133,7 @@ export default function InputForm({inventoryId, changeModalVisible, setInputs}: 
 
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
-                    onPress={() => { changeModalVisible(); handleSubmit() }}
+                    onPress={() => { handleSubmit() }}
                 >
                     <Text style={styles.textStyle}>Crear insumo.</Text>
                 </Pressable>

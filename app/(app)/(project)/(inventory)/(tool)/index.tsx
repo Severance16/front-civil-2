@@ -1,10 +1,10 @@
 import clientAxios from '@/clients/clientAxios'
 import ModalGeneral from '@/components/general/ModalGeneral'
 import NoteCard from '@/components/note/NoteCard'
-import NoteForm from '@/components/note/NoteForm'
+import NoteToolForm from '@/components/note/NoteToolForm'
 import ToolEditForm from '@/components/tool/ToolEditForm'
 import ToolInformation from '@/components/tool/ToolInformation'
-import { NoteTooltData, ToolData, toolSchema } from '@/types'
+import { notesToolSchema, NoteTooltData, ToolData, toolSchema } from '@/types'
 import { formatDateLabel } from '@/utils/dateParser'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { isAxiosError } from 'axios'
@@ -12,31 +12,31 @@ import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native'
 
-const notas: NoteTooltData[] = [
-  {
-    id: 1,
-    description: "Compra",
-    type: "Ingreso",
-    createdAt: "2024-10-20 05:00:00",
-    date: "2024-10-20 05:00:00",
-    quantity: 2,
-    toolId: 1,
-  },
-  {
-    id: 2,
-    description: "Venta",
-    type: "Egreso",
-    createdAt: "2024-10-20 05:00:00",
-    date: "2024-10-20 05:00:00",
-    quantity: 1,
-    toolId: 1,
-  }
-]
+// const notas: NoteTooltData[] = [
+//   {
+//     id: 1,
+//     description: "Compra",
+//     type: "Ingreso",
+//     createdAt: "2024-10-20 05:00:00",
+//     date: "2024-10-20 05:00:00",
+//     quantity: 2,
+//     toolId: 1,
+//   },
+//   {
+//     id: 2,
+//     description: "Venta",
+//     type: "Egreso",
+//     createdAt: "2024-10-20 05:00:00",
+//     date: "2024-10-20 05:00:00",
+//     quantity: 1,
+//     toolId: 1,
+//   }
+// ]
 
 export default function Tool() {
   const { toolId } = useLocalSearchParams<{ toolId: string }>()
   const [tool, setTool] = useState<ToolData>()
-  const [notes, setNotes] = useState<NoteTooltData[]>(notas)
+  const [notes, setNotes] = useState<NoteTooltData[]>([])
   const [modalVisible, setModalVisible] = useState(false)
   const [typeForm, setTypeForm] = useState<"edit" | "create">("edit")
 
@@ -57,6 +57,10 @@ export default function Tool() {
       }
 
       const notesReq = await clientAxios(`/project/tool/${response.data.id}/note`)
+      const responseNotes = notesToolSchema.safeParse(notesReq.data)
+      if (responseNotes.success) {
+        setNotes(responseNotes.data)
+      }
 
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -109,7 +113,7 @@ export default function Tool() {
             </ScrollView>
           </>
         ) :
-          <Text>No hay registros.</Text>
+          <Text style={{textAlign: "center"}}>No hay registros.</Text>
         }
       </View>
       <Text style={styles.tittle}>Acciones</Text>
@@ -131,7 +135,7 @@ export default function Tool() {
 
       <ModalGeneral changeModalVisible={changeModalVisible} modalVisible={modalVisible}>
         {typeForm === 'edit' && (<ToolEditForm tool={tool} setTool={setTool} changeModalVisible={changeModalVisible}/>)}
-        {typeForm === "create" && (<NoteForm />)}
+        {typeForm === "create" && (<NoteToolForm toolId={tool.id} setNotes={setNotes} changeModalVisible={changeModalVisible} setTool={setTool}/>)}
       </ModalGeneral>
     </View>
   )
