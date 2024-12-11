@@ -3,6 +3,7 @@ import ModalGeneral from '@/components/general/ModalGeneral'
 import InputEditForm from '@/components/input/InputEditForm'
 import InputInformation from '@/components/input/InputInformation'
 import NoteCard from '@/components/note/NoteCard'
+import NoteInputForm from '@/components/note/NoteInputForm'
 import { InputData, inputSchema, NoteInputData, notesInputSchema } from '@/types'
 import { formatDateLabel } from '@/utils/dateParser'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -114,7 +115,7 @@ export default function Input() {
 
       <ModalGeneral changeModalVisible={changeModalVisible} modalVisible={modalVisible}>
         {typeForm === 'edit' && (<InputEditForm input={input} setInput={setInput} changeModalVisible={changeModalVisible}/>)}
-        {/* {typeForm === "create" && (<NoteToolForm toolId={tool.id} setNotes={setNotes} changeModalVisible={changeModalVisible} setTool={setTool}/>)} */}
+        {typeForm === "create" && (<NoteInputForm inputId={input.id} setNotes={setNotes} changeModalVisible={changeModalVisible} setInput={setInput}/>)}
       </ModalGeneral>
     </View>
   )

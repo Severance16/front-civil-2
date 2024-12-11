@@ -301,6 +301,28 @@ export const notesInputSchema = z.array(
   })
 )
 
+export const noteInputCreateSchema = z.object({
+  input: inputSchema.pick({
+    id: true,
+    numberArticle: true,
+    description: true,
+    unit: true,
+    quantity: true,
+    purchaseDate: true,
+    unitValue: true,
+    createdAt: true
+  }),
+  note: noteInputSchema.pick({
+    id: true,
+    date: true,
+    type: true,
+    description: true,
+    quantity: true,
+    createdAt: true,
+    inputId: true
+  })
+})
+
 type NoteInput = z.infer<typeof noteInputSchema>
 export type NoteInputData = Pick<NoteInput, "createdAt" | "date" | "description" | "id" | "inputId" | "quantity" | "type">
 
@@ -353,3 +375,10 @@ export const noteToolCreateSchema = z.object({
 
 type NoteTool = z.infer<typeof noteToolSchema>
 export type NoteTooltData = Pick<NoteTool, "createdAt" | "date" | "description" | "id" | "toolId" | "quantity" | "type">
+
+export type NoteCreate = {
+  date: string,
+  description: string,
+  quantity: string,
+  type: string
+}

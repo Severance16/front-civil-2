@@ -1,9 +1,8 @@
-import { NoteTooltData } from '@/types'
+import { NoteCreate, NoteTooltData } from '@/types'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
-import { NoteCreate } from './NoteToolForm';
 
 const items = [
     { label: "Ingreso", value: "Ingreso" },

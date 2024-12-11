@@ -1,4 +1,4 @@
-import { noteToolCreateSchema, NoteTooltData, ToolData } from '@/types'
+import { NoteCreate, noteToolCreateSchema, NoteTooltData, ToolData } from '@/types'
 import React, { useState } from 'react'
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import NoteTypePicker from './NoteTypePicker'
@@ -13,12 +13,6 @@ type NoteFormProps = {
     setTool: React.Dispatch<React.SetStateAction<ToolData | undefined>>
 }
 
-export type NoteCreate = {
-    date: string,
-    description: string,
-    quantity: string,
-    type: string
-}
 const noteInitCreate: NoteCreate = {
     date: "",
     description: "",
