@@ -1,4 +1,4 @@
-import { boolean, z } from "zod";
+import { boolean, number, z } from "zod";
 
 export const userSchema = z.object({
   id: z.number(),
@@ -382,3 +382,44 @@ export type NoteCreate = {
   quantity: string,
   type: string
 }
+
+export const informationSchema = z.object({
+  id: z.number().optional(),
+  // state: z.string(),
+  date: z.string(),
+  time: z.string().optional().nullable(),
+  precipitation: z.string().optional().nullable(),
+  temperature: z.string().optional().nullable(),
+  humidity: z.string().optional().nullable(),
+  wind: z.string().optional().nullable(),
+  createdAt: z.string().optional()
+})
+
+export const informationDashboardSchema = z.array(
+  informationSchema.pick({
+    id: true,
+    // state: true,
+    date: true,
+    time: true,
+    precipitation: true,
+    temperature: true,
+    humidity: true,
+    wind: true,
+    createdAt: true
+  })
+)
+
+type Information = z.infer<typeof informationSchema>
+export type InformationData = Pick<Information, "createdAt" | "date" | "humidity" | "id" | "precipitation" | "temperature" | "time" | "wind">
+
+export const apiMeterologicalSchema = z.object({
+  current: z.object({
+    temperature_2m: z.number(),
+    weather_code: z.number(),
+    wind_speed_10m: z.number(),
+    relative_humidity_2m: z.number()
+  }),
+  daily: z.object({
+    precipitation_probability_max: z.array(z.number())
+  })
+})

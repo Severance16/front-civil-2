@@ -76,6 +76,11 @@ export default function ProjectLayout() {
         options={{ href: null }}
         
       />
+      <Tabs.Screen
+        name="(control)/index"
+        options={{ href: null }}
+        
+      />
     </Tabs>
   );
 }
