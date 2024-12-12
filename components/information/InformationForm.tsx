@@ -36,7 +36,7 @@ export default function InformationForm({ projectId, setInformations, changeModa
         return;
       }
       setLoad(true);
-      const parsedDate = parse(information.date, "MM/dd/yy HH:mm:ss", new Date());
+      const parsedDate = parse(information.date, "dd/MM/yy HH:mm:ss", new Date());
       const { data } = await clientAxios.post(`/project/${projectId}/information`, {...information, date: formatISO(parsedDate)});
       const response = informationSchema.safeParse(data);
       if (response.success) {

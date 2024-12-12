@@ -6,11 +6,13 @@ import InformationForm from '@/components/information/InformationForm'
 import useProject from '@/hooks/useProject'
 import { informationDashboardSchema, InformationData } from '@/types'
 import { isAxiosError } from 'axios'
+import { useGlobalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function Control() {
 
+  const {refreshControl} = useGlobalSearchParams<{refreshControl: string}>()
   const { projectId } = useProject()
 
   const [informations, setInformations] = useState<InformationData[]>([])
@@ -36,7 +38,7 @@ export default function Control() {
 
   useEffect(() => {
     getAllInformation()
-  }, [])
+  }, [refreshControl])
 
   return (
     <View style={styles.container}>

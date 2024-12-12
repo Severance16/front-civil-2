@@ -1,7 +1,9 @@
 import clientAxios from '@/clients/clientAxios';
 import AssistCard from '@/components/assist/AssistCard';
+import AssistForm from '@/components/assist/AssistForm';
 import ControlInformation from '@/components/control/ControlInformation';
 import ModalGeneral from '@/components/general/ModalGeneral';
+import InformationEditForm from '@/components/information/InformationEditForm';
 import { assistsSchema, AssistData, InformationData, informationSchema } from '@/types';
 import { formatDateLabel } from '@/utils/dateParser';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -10,11 +12,32 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
 
+const assistsDataFake: AssistData[] = [
+    {
+        id: 1,
+        name: "Sergio Ortiz",
+        contractor: "Interno",
+        area: "Prueba",
+        work: "Prueba"
+    },
+    {
+        id: 2,
+        name: "Victor Sanchez",
+        contractor: "Contratista",
+        area: "Prueba",
+        work: "Prueba"
+    },
+]
+
+export type TypesForm = "createAssist" | "editAssist" | "editInformation"
+
 export default function ControlDetail() {
 
     const { informationId } = useLocalSearchParams<{ informationId: string }>();
     const [information, setInformation] = useState<InformationData>()
-    const [assists, setAssists] = useState<AssistData[]>([])
+    const [assists, setAssists] = useState<AssistData[]>(assistsDataFake)
+    const [typeForm, setTypeForm] = useState<TypesForm>("createAssist")
+    const [modalVisible, setModalVisible] = useState(false)
 
     const getInformation = async () => {
         if (informationId === null || informationId === undefined) {
@@ -48,6 +71,24 @@ export default function ControlDetail() {
         }
     }
 
+    const changeModalForm = (type: TypesForm) => {
+        setTypeForm(type)
+    }
+
+    const changeModalVisible = () => {
+        setModalVisible(!modalVisible)
+    }
+
+    const handleEditInformation = () => {
+        setTypeForm("editInformation")
+        changeModalVisible()
+    }
+
+    const handleCreateAssist = async () => {
+        setTypeForm("createAssist")
+        changeModalVisible()
+    }
+
     useEffect(() => {
         getInformation()
         getAssists()
@@ -71,9 +112,10 @@ export default function ControlDetail() {
                 {assists.length > 0 ? (
                     <>
                         <View style={styles.containerLabelTableNotes}>
-                            <Text style={styles.labelTable}>Fecha</Text>
-                            <Text style={styles.labelTable}>Cantidad</Text>
-                            <Text style={styles.labelTable}>Tipo</Text>
+                            <Text style={styles.labelTable}>Nombre</Text>
+                            <Text style={styles.labelTable}>Area/Trabajo</Text>
+                            <Text style={styles.labelTable}>Empleado</Text>
+                            <Text style={styles.labelTable}>Accciones</Text>
                         </View>
                         <ScrollView>
                             {assists.map(asssist => <AssistCard key={asssist.id} assist={asssist} />)}
@@ -86,13 +128,13 @@ export default function ControlDetail() {
             <Text style={styles.tittle}>Acciones</Text>
 
             <View style={styles.actionsContainer}>
-                <TouchableNativeFeedback >
+                <TouchableNativeFeedback onPress={handleEditInformation}>
                     <View style={styles.actionButton}>
                         <MaterialCommunityIcons name="pencil-outline" size={24} color="#EFAD29" />
                         <Text style={{ width: "auto" }}>Editar</Text>
                     </View>
                 </TouchableNativeFeedback>
-                <TouchableNativeFeedback >
+                <TouchableNativeFeedback onPress={handleCreateAssist}>
                     <View style={styles.actionButton}>
                         <MaterialCommunityIcons name="account-plus-outline" size={24} color="#EFAD29" />
                         <Text style={{ width: "auto" }}>Asistencia</Text>
@@ -100,10 +142,10 @@ export default function ControlDetail() {
                 </TouchableNativeFeedback>
             </View>
 
-            {/* <ModalGeneral changeModalVisible={changeModalVisible} modalVisible={modalVisible}>
-                {typeForm === 'edit' && (<InputEditForm input={input} setInput={setInput} changeModalVisible={changeModalVisible} />)}
-                {typeForm === "create" && (<NoteInputForm inputId={input.id} setNotes={setNotes} changeModalVisible={changeModalVisible} setInput={setInput} />)}
-            </ModalGeneral> */}
+            <ModalGeneral changeModalVisible={changeModalVisible} modalVisible={modalVisible}>
+                {typeForm === 'createAssist' && (<AssistForm informationId={information.id !== undefined ? information.id : 999999} setAssists={setAssists} changeModalVisible={changeModalVisible}/>)}
+                {typeForm === "editInformation" && (<InformationEditForm information={information} setInformation={setInformation} changeModalVisible={changeModalVisible}/>)}
+            </ModalGeneral>
         </View>
     )
 }
@@ -164,7 +206,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   labelTable: {
-    width: 100,
+    width: 75,
     textAlign: "center",
     fontWeight: "500",
     color: "#262829"
