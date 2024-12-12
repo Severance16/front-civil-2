@@ -423,3 +423,24 @@ export const apiMeterologicalSchema = z.object({
     precipitation_probability_max: z.array(z.number())
   })
 })
+
+export const assistSchema = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+  area: z.string().optional(),
+  work: z.string().optional(),
+  contractor: z.enum(["Interno", "Contratista"])
+})
+
+export const assistsSchema = z.array(
+  assistSchema.pick({
+    id: true,
+    name: true,
+    area: true,
+    work: true,
+    contractor: true
+  })
+)
+
+type Assit = z.infer<typeof assistSchema>
+export type AssistData = Pick<Assit, "area" | "contractor" | "id" | "name" | "work">

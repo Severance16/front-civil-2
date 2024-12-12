@@ -3,7 +3,7 @@ import { weatherCodeParse } from "@/utils/watherCodeParser";
 import axios, { isAxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { formatISO, format } from 'date-fns';
+import { formatISO, format, parse, parseISO } from 'date-fns';
 import clientAxios from "@/clients/clientAxios";
 
 type InformationFormProps = {
@@ -15,7 +15,7 @@ type InformationFormProps = {
 const dateNow = new Date()
 
 const InformationInitCreate: InformationData = {
-  date: formatISO(dateNow),
+  date: format(dateNow, "dd/MM/yy HH:mm:ss"),
   // id: 99999,
   // state: "",
   humidity: "",
@@ -36,7 +36,8 @@ export default function InformationForm({ projectId, setInformations, changeModa
         return;
       }
       setLoad(true);
-      const { data } = await clientAxios.post(`/project/${projectId}/information`, information);
+      const parsedDate = parse(information.date, "MM/dd/yy HH:mm:ss", new Date());
+      const { data } = await clientAxios.post(`/project/${projectId}/information`, {...information, date: formatISO(parsedDate)});
       const response = informationSchema.safeParse(data);
       if (response.success) {
         setInformations((prevItems) => [...prevItems, response.data]);
@@ -63,7 +64,7 @@ export default function InformationForm({ projectId, setInformations, changeModa
       if (response.success) {
         setInformation({
           ...information,
-          date: formatISO(dateRegenerate),
+          date: format(dateNow, "dd/MM/yy HH:mm:ss"),
           time: weatherCodeParse(response.data.current.weather_code),
           humidity: `${response.data.current.relative_humidity_2m} %`,
           temperature: `${response.data.current.temperature_2m} °C`,
@@ -75,10 +76,17 @@ export default function InformationForm({ projectId, setInformations, changeModa
       if (isAxiosError(error) && error.response) {
         Alert.alert("No se pudo obtener datos metereológicos.");
       }
-    }finally{
+    } finally {
       setLoad(false)
     }
   }
+
+  const changeValue = (key: keyof InformationData, value: string | number) => {
+    setInformation({
+      ...information,
+      [key]: value,
+    });
+  };
 
   useEffect(() => {
     getMeteorologicalData()
@@ -95,11 +103,13 @@ export default function InformationForm({ projectId, setInformations, changeModa
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                value={format(information?.date, "dd-MM-yyyy HH:mm:ss")}
+                value={information?.date}
                 placeholder="Fecha y hora"
                 keyboardType="default"
                 autoCapitalize="sentences"
-                editable={false}
+                onChangeText={(e) => {
+                  changeValue("date", e);
+                }}
               />
             </View>
           </View>
@@ -116,7 +126,7 @@ export default function InformationForm({ projectId, setInformations, changeModa
               />
             </View>
           </View>
-          
+
           <View>
             <Text>Humedad</Text>
             <View style={styles.inputContainer}>
@@ -129,7 +139,7 @@ export default function InformationForm({ projectId, setInformations, changeModa
               />
             </View>
           </View>
-          
+
           <View>
             <Text>Precipitaciones</Text>
             <View style={styles.inputContainer}>
@@ -142,7 +152,7 @@ export default function InformationForm({ projectId, setInformations, changeModa
               />
             </View>
           </View>
-          
+
           <View>
             <Text>Temperatura</Text>
             <View style={styles.inputContainer}>
@@ -155,7 +165,7 @@ export default function InformationForm({ projectId, setInformations, changeModa
               />
             </View>
           </View>
-          
+
           <View>
             <Text>Vientos</Text>
             <View style={styles.inputContainer}>

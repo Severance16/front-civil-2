@@ -2,11 +2,10 @@ import clientAxios from '@/clients/clientAxios'
 import FloatButton from '@/components/general/FloatButton'
 import ModalGeneral from '@/components/general/ModalGeneral'
 import InformationCard from '@/components/information/InformationCard'
-// import ModalGeneral from '@/components/general/ModalGeneral'
 import InformationForm from '@/components/information/InformationForm'
 import useProject from '@/hooks/useProject'
 import { informationDashboardSchema, InformationData } from '@/types'
-import axios, { isAxiosError } from 'axios'
+import { isAxiosError } from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 
@@ -21,10 +20,8 @@ export default function Control() {
     try {
       const { data } = await clientAxios(`project/${projectId}/information`)
       const reponse = informationDashboardSchema.safeParse(data)
-      console.log(reponse)
       if (reponse.success) {
         setInformations(reponse.data)
-
       }
     } catch (error) {
       if (isAxiosError(error) && error.response) {

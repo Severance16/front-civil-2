@@ -40,13 +40,6 @@ export default function InputInformation({ input }: InputInformationProps) {
                 </View>
             </View>
 
-            {/* <View style={styles.dataContainer}>
-                <Text style={styles.label}>Lugar</Text>
-                <Text style={styles.dataFirts}>{input.place}</Text>
-            </View> */}
-
-
-
             <View style={styles.rowGroup}>
                 <View style={styles.dataContainer}>
                     <Text style={styles.label}>Valor unitario</Text>
@@ -58,7 +51,6 @@ export default function InputInformation({ input }: InputInformationProps) {
                     <Text style={styles.dataTool}>{input.quantity}</Text>
                 </View>
             </View>
-
 
             <View style={styles.dataContainer}>
                 <Text style={styles.label}>Valor total</Text>
