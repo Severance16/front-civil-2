@@ -6,10 +6,11 @@ import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native'
 
 type AssistCardProps = {
   assist: AssistData,
-  // updateState: (action: "edit" | "delete", assist: AssistData ) => 
+  handleEditAssist: (assistEditing: AssistData) => void
+  handleDeleteAssist: (assistId: number) => Promise<void>
 }
 
-export default function AssistCard({ assist }: AssistCardProps) {
+export default function AssistCard({ assist, handleDeleteAssist, handleEditAssist }: AssistCardProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{assist.name}</Text>
@@ -17,16 +18,16 @@ export default function AssistCard({ assist }: AssistCardProps) {
       <Text style={styles.label}>{assist.contractor}</Text>
       <View style={{ flexDirection: "row", width: 75, alignItems: "center", justifyContent: "center", gap: 1 }}>
         
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => handleEditAssist(assist)}>
           <View style={{ padding: 5 }}>
-            <Text style={{ textAlign: "center", color: "#262829", fontSize: 10 }}>Editar</Text>
+            <Text style={{ textAlign: "center", color: "#5B5B5E", fontSize: 10 }}>Editar</Text>
             <MaterialCommunityIcons name={"pencil-outline"} size={20} color={"#F1C16D"} />
           </View>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => handleDeleteAssist(assist.id || 999999)}>
           <View style={{ padding: 5 }}>
-            <Text style={{ textAlign: "center", color: "#262829", fontSize: 10 }}>Elimar</Text>
+            <Text style={{ textAlign: "center", color: "#5B5B5E", fontSize: 10 }}>Elimar</Text>
             <MaterialCommunityIcons name={"trash-can-outline"} size={20} color={"#f78989"} />
           </View>
         </TouchableNativeFeedback>

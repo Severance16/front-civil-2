@@ -1,10 +1,11 @@
 import clientAxios from '@/clients/clientAxios';
 import AssistCard from '@/components/assist/AssistCard';
+import AssistEditForm from '@/components/assist/AssistEditForm';
 import AssistForm from '@/components/assist/AssistForm';
 import ControlInformation from '@/components/control/ControlInformation';
 import ModalGeneral from '@/components/general/ModalGeneral';
 import InformationEditForm from '@/components/information/InformationEditForm';
-import { assistsSchema, AssistData, InformationData, informationSchema } from '@/types';
+import { assistsSchema, AssistData, InformationData, informationSchema, assistSchema } from '@/types';
 import { formatDateLabel } from '@/utils/dateParser';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { isAxiosError } from 'axios';
@@ -38,6 +39,13 @@ export default function ControlDetail() {
     const [assists, setAssists] = useState<AssistData[]>(assistsDataFake)
     const [typeForm, setTypeForm] = useState<TypesForm>("createAssist")
     const [modalVisible, setModalVisible] = useState(false)
+    const [assistEdit, setAssistEdit] = useState<AssistData>({
+        contractor: "Contratista",
+        name: "",
+        area: "",
+        id: 99999,
+        work: ""
+    })
 
     const getInformation = async () => {
         if (informationId === null || informationId === undefined) {
@@ -71,10 +79,6 @@ export default function ControlDetail() {
         }
     }
 
-    const changeModalForm = (type: TypesForm) => {
-        setTypeForm(type)
-    }
-
     const changeModalVisible = () => {
         setModalVisible(!modalVisible)
     }
@@ -86,6 +90,29 @@ export default function ControlDetail() {
 
     const handleCreateAssist = async () => {
         setTypeForm("createAssist")
+        changeModalVisible()
+    }
+
+    const handleDeleteAssist = async ( assistId: number ) => {
+        try {
+            const { data } = await clientAxios.delete(`/project/information/assist/${assistId}`)
+            const response = assistSchema.safeParse(data)
+            if (response.success) {
+                const updatedAssits = assists.filter(assistState => assistState.id !== response.data.id)
+                setAssists(updatedAssits)
+            }else{
+                Alert.alert("Algo ocurrio.")
+            }
+        } catch (error) {
+            if (isAxiosError(error) && error.response) {
+                Alert.alert("Hubo un error.");
+            }
+        }
+    }
+    
+    const handleEditAssist = ( assistEditing: AssistData ) => {
+        setTypeForm("editAssist")
+        setAssistEdit(assistEditing)
         changeModalVisible()
     }
 
@@ -118,7 +145,7 @@ export default function ControlDetail() {
                             <Text style={styles.labelTable}>Accciones</Text>
                         </View>
                         <ScrollView>
-                            {assists.map(asssist => <AssistCard key={asssist.id} assist={asssist} />)}
+                            {assists.map(asssist => <AssistCard key={asssist.id} assist={asssist} handleEditAssist={handleEditAssist} handleDeleteAssist={handleDeleteAssist}/>)}
                         </ScrollView>
                     </>
                 ) :
@@ -145,6 +172,7 @@ export default function ControlDetail() {
             <ModalGeneral changeModalVisible={changeModalVisible} modalVisible={modalVisible}>
                 {typeForm === 'createAssist' && (<AssistForm informationId={information.id !== undefined ? information.id : 999999} setAssists={setAssists} changeModalVisible={changeModalVisible}/>)}
                 {typeForm === "editInformation" && (<InformationEditForm information={information} setInformation={setInformation} changeModalVisible={changeModalVisible}/>)}
+                {typeForm === "editAssist" && (<AssistEditForm assist={assistEdit} changeModalVisible={changeModalVisible} setAssists={setAssists} assists={assists}/>)}
             </ModalGeneral>
         </View>
     )

@@ -11,10 +11,11 @@ const items = [
 
 interface AssistContractorPickerPikerProps {
     changeValue: (key: keyof AssistData, value: string | number) => void
+    value?: string
 }
 
-export default function AssistContractorPicker({ changeValue }: AssistContractorPickerPikerProps) {
-    const [valor, setValor] = useState("")
+export default function AssistContractorPicker({ changeValue, value }: AssistContractorPickerPikerProps) {
+    const [valor, setValor] = useState<string>(value || "")
     return (
         <RNPickerSelect
             placeholder={{
