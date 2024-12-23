@@ -43,16 +43,15 @@ export const projectsSchema = z.object({
   endDate: z.string(),
   createdAt: z.string(),
   ingResidentId: z.number(),
+  isIngResident: z.boolean().optional()
 });
 
-// {"address": "calle 6", "authorizedLevels": 10, "createdAt": "2024-10-25T00:59:25.419Z", "endDate": "2024-10-31T19:59:10.000Z", "id": 1, "ingResidentId": 2, "license": "No tiene", "name": "Edificio", "owner": "Sergio", "photo": "no registra", "startDate": "2024-10-24T19:59:05.000Z", "totalArea": "300m2", "workType": "Residencial"}
 type Project = z.infer<typeof projectsSchema>;
 export type DashBoardProject = Pick<
   Project,
   "id" | "name" | "owner" | "address" | "workType"
 >;
-export type ProjectData = Pick<Project, "id" | "address" | "authorizedLevels" | "createdAt" | "endDate" | "ingResidentId" | "license" | "name" | "owner" | "photo" | "startDate" | "totalArea" | "workType">
-// export type ProjectCreate = Pick<Project, "address" | "authorizedLevels" | "endDate" | "license" | "name" | "owner" | "photo" | "startDate" | "totalArea" | "workType">
+export type ProjectData = Pick<Project, "id" | "isIngResident" | "address" | "authorizedLevels" | "createdAt" | "endDate" | "ingResidentId" | "license" | "name" | "owner" | "photo" | "startDate" | "totalArea" | "workType">
 
 export const dashboardProjectSchema = z.array(
   projectsSchema.pick({

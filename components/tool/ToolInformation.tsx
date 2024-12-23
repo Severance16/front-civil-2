@@ -33,10 +33,15 @@ export default function ToolInformation({ tool }: ToolInformation) {
           <Text style={styles.label}>Fecha de compra</Text>
           <Text style={styles.dataTool}>{formatDateLabel(tool.purchaseDate)}</Text>
         </View>
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Tiempo en servicio</Text>
-          <Text style={styles.dataTool}>{tool.serviceTime}</Text>
-        </View>
+        {
+          tool.serviceTime !== null && (
+
+            <View style={styles.dataContainer}>
+              <Text style={styles.label}>Tiempo en servicio</Text>
+              <Text style={styles.dataTool}>{`${tool.serviceTime} meses`}</Text>
+            </View>
+          )
+        }
       </View>
 
       <View style={styles.dataContainer}>

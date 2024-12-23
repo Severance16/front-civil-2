@@ -29,7 +29,7 @@ export default function SubItemCard({ subItem, order }: SubItemCardProps) {
 
         <View style={styles.rowContainer}>
           <View style={styles.datagroup}>
-            <Text style={styles.label}>Presupuesto</Text>
+            <Text style={styles.label}>Valor</Text>
             <Text style={styles.data}>{formatCurrency(subItem.amount)}</Text>
           </View>
 

@@ -80,7 +80,7 @@ export default function NoteToolForm({ toolId, setNotes, changeModalVisible, set
                                 changeValue("description", e);
                             }}
                             value={note?.description}
-                            placeholder="descripción"
+                            placeholder="Descripción"
                             keyboardType="default"
                             autoCapitalize="sentences"
                         />

@@ -111,7 +111,7 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
                                 changeValue("amount", e);
                             }}
                             value={subItem?.amount}
-                            placeholder="Presupuesto"
+                            placeholder="Valor"
                             keyboardType="decimal-pad"
                             autoCapitalize="sentences"
                         />

@@ -86,7 +86,7 @@ export default function ReportDashboard() {
         </View>
         <Text style={styles.tittle}>Evidencia</Text>
         <View style={styles.containerImage}>
-          <Image style={styles.image} source={`http://192.168.1.135:4000/statics/${report.evidence}`} alt="Imagen proyecto" />
+          <Image style={styles.image} source={`http://192.168.1.35:4000/api/statics/${report.evidence}`} alt="Imagen proyecto" />
         </View>
 
         <Text style={styles.tittle}>Acciones</Text>

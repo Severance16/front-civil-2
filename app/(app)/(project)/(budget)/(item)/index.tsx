@@ -49,7 +49,7 @@ export default function index() {
     <View style={{ flex: 1, padding: 20 }}>
       <Text style={styles.tittle}>{item.description}</Text>
       <View style= {styles.divider}></View>
-      <Text style={styles.tittle}>Subactividades</Text>
+      <Text style={styles.tittle}>Subcapitulos</Text>
       <Text style={styles.textInfoProjects}>
         {subItems.length === 0
           ? "No tienes ninguna aún definida."

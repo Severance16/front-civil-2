@@ -1,12 +1,15 @@
 import clientAxios from "@/clients/clientAxios";
 import useProject from "@/hooks/useProject";
 import { dashboardBudgetSchema, ProjectData, projectsSchema } from "@/types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Image } from 'expo-image';
 import ProjectInformation from "@/components/project/ProjectInformation";
 import { isAxiosError } from "axios";
 import BudgetCard from "@/components/budget/BudgetCard";
+import ModalGeneral from "@/components/general/ModalGeneral";
+import ProjectAddColaboraborForm from "@/components/project/ProjectAddColaboratorForm";
+import ProjectAddColaborator from "@/components/project/ProjectAddColaborator";
 
 type BudgetInfo = {
   exist: boolean,
@@ -26,6 +29,7 @@ export default function Project() {
 
   const [project, setProject] = useState<ProjectData | undefined>(undefined);
   const [budget, setBudget] = useState<BudgetDashBoardDataKeys>(initBudget)
+  const [modalVisible, setModalVisible] = useState(false)
 
   const getProject = async () => {
     try {
@@ -51,6 +55,10 @@ export default function Project() {
     }
   };
 
+  const changeModalVisble = () => {
+    setModalVisible(!modalVisible)
+  }
+
   useEffect(() => {
     getProject();
   }, [projectId]);
@@ -58,24 +66,30 @@ export default function Project() {
   if (!project) return <Text>Cargango...</Text>
 
   return (
-    <ScrollView style={{ flex: 1, paddingTop: 5 }}>
-      <View style={styles.container}>
-        <Text style={styles.projectName}>{project.name}</Text>
-        <View style={styles.containerImage}>
-          <Image style={styles.image} source={`http://192.168.1.135:4000/statics/${project.photo}`} alt="Imagen proyecto" />
+    <>
+      <ScrollView style={{ flex: 1, paddingTop: 5 }}>
+        <View style={styles.container}>
+          <Text style={styles.projectName}>{project.name}</Text>
+          <View style={styles.containerImage}>
+            <Image style={styles.image} source={`http://192.168.1.135:4000/statics/${project.photo}`} alt="Imagen proyecto" />
+          </View>
+          <Text style={styles.tittle}>Información base</Text>
+          <View style={styles.containerInfo}>
+            <ProjectInformation project={project} />
+          </View>
+            {project.isIngResident && (<ProjectAddColaborator changeModalVisible={changeModalVisble}/>)}
+          <Text style={styles.tittle}>Presupuestos</Text>
+          <View style={styles.containerBudget}>
+            {Object.keys(budget).map((budgetState, index) => (
+              <BudgetCard key={index} type={budgetState} exist={budget[budgetState].exist} budgetId={budget[budgetState].id} />
+            ))}
+          </View>
         </View>
-        <Text style={styles.tittle}>Información base</Text>
-        <View style={styles.containerInfo}>
-          <ProjectInformation project={project} />
-        </View>
-        <Text style={styles.tittle}>Presupuestos</Text>
-        <View style={styles.containerBudget}>
-          {Object.keys(budget).map((budgetState, index) => (
-            <BudgetCard key={index} type={budgetState} exist={budget[budgetState].exist} budgetId={budget[budgetState].id} />
-          ))}
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <ModalGeneral changeModalVisible={changeModalVisble} modalVisible={modalVisible} >
+        <ProjectAddColaboraborForm changeModalVisible={changeModalVisble}/>
+      </ModalGeneral>
+    </>
   );
 }
 
