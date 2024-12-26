@@ -2,7 +2,7 @@ import clientAxios from "@/clients/clientAxios";
 import useProject from "@/hooks/useProject";
 import { dashboardBudgetSchema, ProjectData, projectsSchema } from "@/types";
 import React, { useEffect, useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Image } from 'expo-image';
 import ProjectInformation from "@/components/project/ProjectInformation";
 import { isAxiosError } from "axios";
@@ -63,7 +63,7 @@ export default function Project() {
     getProject();
   }, [projectId]);
 
-  if (!project) return <Text>Cargango...</Text>
+  if (!project) return <View style={styles.screenLoad}><ActivityIndicator size="large" color="#EFAD29" /></View>
 
   return (
     <>
@@ -94,6 +94,11 @@ export default function Project() {
 }
 
 const styles = StyleSheet.create({
+  screenLoad: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
   container: {
     paddingHorizontal: 20,
     paddingBottom: 30,
