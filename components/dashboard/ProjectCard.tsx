@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   },
   infoSection: {
     alignItems: "center",
+    width: 110,
   },
   label: {
     fontSize: 12,
@@ -84,5 +85,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "500",
     color: "#262829",
+    textAlign: "center"
   },
 });
