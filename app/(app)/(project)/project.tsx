@@ -71,7 +71,7 @@ export default function Project() {
         <View style={styles.container}>
           <Text style={styles.projectName}>{project.name}</Text>
           <View style={styles.containerImage}>
-            <Image style={styles.image} source={`http://192.168.1.135:4000/statics/${project.photo}`} alt="Imagen proyecto" />
+            <Image style={styles.image} source={`${process.env.EXPO_PUBLIC_SERVER}/statics/${project.photo}`} alt="Imagen proyecto" />
           </View>
           <Text style={styles.tittle}>Información base</Text>
           <View style={styles.containerInfo}>
