@@ -1,5 +1,5 @@
 import { InformationData } from '@/types'
-import { format } from "date-fns"
+import { formatDateTimeLabel } from '@/utils/dateParser'
 import { router } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native'
@@ -18,7 +18,7 @@ export default function InformationCard({ information }: InformationCardProps) {
             <View style={styles.container}>
                 <View style={styles.rowGroup}>
                     <Text style={styles.textHeader}>{information.id}</Text>
-                    <Text style={styles.textHeader}>{typeof information.date === "string" ? format(information.date, "dd/MM/yyyy hh:mm:ss"): ""}</Text>
+                    <Text style={styles.textHeader}>{typeof information.date === "string" ? formatDateTimeLabel(information.date): ""}</Text>
                 </View>
                 <Text style={styles.description}>{information.time}</Text>
 

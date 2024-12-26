@@ -3,7 +3,7 @@ import ModalGeneral from '@/components/general/ModalGeneral';
 import ReportEditForm from '@/components/report/ReportEditForm';
 import ReportInformation from '@/components/report/ReportInformation';
 import { ReportData, reportSchema } from '@/types';
-import { formatDateLabel } from '@/utils/dateParser';
+import { formatDateTimeLabel } from '@/utils/dateParser';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { isAxiosError } from 'axios';
 import { Image } from 'expo-image';
@@ -78,7 +78,7 @@ export default function ReportDashboard() {
     <View style={styles.container}>
       <Text style={styles.tittle}>Información</Text>
       {report.createdAt && (
-        <Text style={styles.createdAtd}>Generado: {formatDateLabel(report.createdAt)}</Text>
+        <Text style={styles.createdAtd}>Generado: {formatDateTimeLabel(report.createdAt)}</Text>
       )}
       <ScrollView>
         <View style={styles.containerInfo}>

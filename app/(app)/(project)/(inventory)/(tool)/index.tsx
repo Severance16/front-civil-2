@@ -5,33 +5,12 @@ import NoteToolForm from '@/components/note/NoteToolForm'
 import ToolEditForm from '@/components/tool/ToolEditForm'
 import ToolInformation from '@/components/tool/ToolInformation'
 import { notesToolSchema, NoteTooltData, ToolData, toolSchema } from '@/types'
-import { formatDateLabel } from '@/utils/dateParser'
+import { formatDateTimeLabel } from '@/utils/dateParser'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { isAxiosError } from 'axios'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native'
-
-// const notas: NoteTooltData[] = [
-//   {
-//     id: 1,
-//     description: "Compra",
-//     type: "Ingreso",
-//     createdAt: "2024-10-20 05:00:00",
-//     date: "2024-10-20 05:00:00",
-//     quantity: 2,
-//     toolId: 1,
-//   },
-//   {
-//     id: 2,
-//     description: "Venta",
-//     type: "Egreso",
-//     createdAt: "2024-10-20 05:00:00",
-//     date: "2024-10-20 05:00:00",
-//     quantity: 1,
-//     toolId: 1,
-//   }
-// ]
 
 export default function Tool() {
   const { toolId } = useLocalSearchParams<{ toolId: string }>()
@@ -92,7 +71,7 @@ export default function Tool() {
     <View style={styles.container}>
       <Text style={styles.tittle}>Inventario</Text>
       {tool.createdAt && (
-        <Text style={styles.createdAtd}>Generado: {formatDateLabel(tool.createdAt)}</Text>
+        <Text style={styles.createdAtd}>Generado: {formatDateTimeLabel(tool.createdAt)}</Text>
       )}
       <View style={styles.containerInfo}>
         <ToolInformation tool={tool} />

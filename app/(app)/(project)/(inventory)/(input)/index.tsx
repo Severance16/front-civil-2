@@ -5,7 +5,7 @@ import InputInformation from '@/components/input/InputInformation'
 import NoteCard from '@/components/note/NoteCard'
 import NoteInputForm from '@/components/note/NoteInputForm'
 import { InputData, inputSchema, NoteInputData, notesInputSchema } from '@/types'
-import { formatDateLabel } from '@/utils/dateParser'
+import { formatDateTimeLabel } from '@/utils/dateParser'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { isAxiosError } from 'axios'
 import { useLocalSearchParams } from 'expo-router'
@@ -72,7 +72,7 @@ export default function Input() {
     <View style={styles.container}>
       <Text style={styles.tittle}>Inventario</Text>
       {input.createdAt && (
-        <Text style={styles.createdAtd}>Generado: {formatDateLabel(input.createdAt)}</Text>
+        <Text style={styles.createdAtd}>Generado: {formatDateTimeLabel(input.createdAt)}</Text>
       )}
       <View style={styles.containerInfo}>
         <InputInformation input={input} />

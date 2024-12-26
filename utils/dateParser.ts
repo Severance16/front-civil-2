@@ -9,3 +9,7 @@ export const formatDate = (date: string): string => {
 export const formatDateLabel = (date: string): string => {
     return format(new Date(date), "dd/MM/yyyy")
 }
+
+export const formatDateTimeLabel = (date: string): string => {
+    return format(date, "dd/MM/yyyy hh:mm:ss")
+}

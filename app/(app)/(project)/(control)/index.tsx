@@ -6,7 +6,7 @@ import ControlInformation from '@/components/control/ControlInformation';
 import ModalGeneral from '@/components/general/ModalGeneral';
 import InformationEditForm from '@/components/information/InformationEditForm';
 import { assistsSchema, AssistData, InformationData, informationSchema, assistSchema } from '@/types';
-import { formatDateLabel } from '@/utils/dateParser';
+import { formatDateTimeLabel } from '@/utils/dateParser';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { isAxiosError } from 'axios';
 import { useLocalSearchParams } from 'expo-router';
@@ -127,7 +127,7 @@ export default function ControlDetail() {
         <View style={styles.container}>
             <Text style={styles.tittle}>Control</Text>
             {information.createdAt && (
-                <Text style={styles.createdAtd}>Generado: {formatDateLabel(information.createdAt)}</Text>
+                <Text style={styles.createdAtd}>Generado: {formatDateTimeLabel(information.createdAt)}</Text>
             )}
             <View style={styles.containerInfo}>
                 <ControlInformation information={information} />
