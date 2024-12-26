@@ -7,10 +7,11 @@ import { StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
 type SubItemCardProps = {
   subItem: ItemData;
   order: number;
+  activityOrder: string;
 };
 
 
-export default function SubItemCard({ subItem, order }: SubItemCardProps) {
+export default function SubItemCard({ subItem, order, activityOrder }: SubItemCardProps) {
 
   const handlePress = () => {
     // router.push(`/(app)/(project)/(budget)/(item)?itemId=${item.id}`)
@@ -23,7 +24,7 @@ export default function SubItemCard({ subItem, order }: SubItemCardProps) {
             <Text style={[styles.description]}>{subItem.description}</Text>
           </View>
           <View style={{ flex: 1, paddingRight: 20}}>
-            <Text style={{ textAlign: "right"}}>N. {order + 1}</Text>
+            <Text style={{ textAlign: "right"}}>N. {`${activityOrder}.${order + 1}`}</Text>
           </View>
         </View>
 

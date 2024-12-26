@@ -54,7 +54,7 @@ export default function BudgetDashboard() {
       <ScrollView style={{marginTop: 10}}>
         <View style={{ flex: 1, gap: 10}}>
           {items.map((item, index) => (
-            <ItemCard key={item.id} item={item} order={index}/>
+            <ItemCard key={item.id} item={item} order={index + 1}/>
           ))}
         </View>
       </ScrollView>

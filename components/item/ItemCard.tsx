@@ -13,7 +13,7 @@ type ItemCardProps = {
 export default function ItemCard({ item, order }: ItemCardProps) {
 
   const handlePress = () => {
-    router.push(`/(app)/(project)/(budget)/(item)?itemId=${item.id}`)
+    router.push(`/(app)/(project)/(budget)/(item)?itemId=${item.id}&activity=${order}`)
   }
   return (
     <TouchableNativeFeedback onPress={handlePress}>
@@ -23,7 +23,7 @@ export default function ItemCard({ item, order }: ItemCardProps) {
             <Text style={[styles.description]}>{item.description}</Text>
           </View>
           <View style={{ flex: 1, paddingRight: 20}}>
-            <Text style={{ textAlign: "right"}}>N. {order + 1}</Text>
+            <Text style={{ textAlign: "right"}}>N. {order}</Text>
           </View>
         </View>
 

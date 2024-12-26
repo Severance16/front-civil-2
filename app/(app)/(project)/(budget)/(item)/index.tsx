@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function index() {
-  const { itemId } = useLocalSearchParams<{ itemId: string }>();
+  const { itemId, activity } = useLocalSearchParams<{ itemId: string, activity: string }>();
   const [item, setItem] = useState<ItemData>({id: 0, description: "", amount: 0, incidence: 0})
   const [subItems, setSubItems] = useState<SubItemData[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -58,7 +58,7 @@ export default function index() {
       <ScrollView style={{marginTop: 10}}>
         <View style={{ flex: 1, gap: 10}}>
           {subItems.map((subItem, index) => (
-            <SubItemCard key={subItem.id} subItem={subItem} order={index}/>
+            <SubItemCard key={subItem.id} subItem={subItem} order={index} activityOrder={activity}/>
           ))}
         </View>
       </ScrollView>
