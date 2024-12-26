@@ -62,8 +62,8 @@ export default function Inventory() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.tittle}>Reportes</Text>
-            <Text style={styles.textInfo}>Escoge el tipo de reporte que deseas ver!</Text>
+            <Text style={styles.tittle}>Inventario</Text>
+            <Text style={styles.textInfo}>Escoge el tipo de inventario que deseas ver!</Text>
             <InventoryTypeButton type={type} action={changeType} />
             <Text style={styles.textInfo}>{validateItems() ? `Acá tienes la lista de ${type === "input" ? "insumos" : "herramientas"}.` : `No hay registros de ${type === "input" ? "insumos" : "herramientas"}.`}</Text>
             <ScrollView>
