@@ -28,6 +28,7 @@ const SubItemDataInit: SubItemDataCreate = {
 
 export default function SubItemForm({ itemId, changeModalVisible, setSubItems }: SubItemFormProps) {
     const [subItem, setSubItem] = useState<SubItemDataCreate>(SubItemDataInit)
+    const [load, setLoad] = useState(false)
 
     const handleSubmit = async () => {
         try {
@@ -36,6 +37,7 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
                 Alert.alert("La subactividad no cumple con la información mínima obligatoria.")
                 return
             }
+            setLoad(true)
             const { data } = await clientAxios.post(`/project/budget/item/${itemId}/subitem`, {
                 description,
                 unit: unit !== "" ? unit : null,
@@ -47,6 +49,7 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
             // console.log(response)
             if (response.success) {
                 setSubItems((prevItems) => [...prevItems, response.data])
+                changeModalVisible()
             } else {
                 Alert.alert("Algo ocurrio.")
             }
@@ -54,6 +57,8 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
             if (isAxiosError(error) && error.response) {
                 Alert.alert(error.response.data.error);
             }
+        } finally {
+            setLoad(false)
         }
     }
 
@@ -134,8 +139,10 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
 
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
-                    onPress={() => { changeModalVisible(); handleSubmit() }}>
-                    <Text style={styles.textStyle}>Crear subactividad.</Text>
+                    onPress={() => { handleSubmit() }}
+                    disabled={load}
+                >
+                    <Text style={styles.textStyle}>{load ? "Cargando..." : "Crear subactividad."}</Text>
                 </Pressable>
             </View>
         </View>

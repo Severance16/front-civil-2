@@ -44,6 +44,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
         totalArea: "",
         workType: null
     })
+    const [load, setLoad] = useState(false)
 
     const handleSubmit = async () => {
         try {
@@ -57,6 +58,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
             if (project.endDate !== "") {
                 endDateFormated = formatDate(project.endDate)
             }
+            setLoad(true)
             const { data } = await clientAxios.post("/project", {
                 ...project,
                 startDate: startDateFormated,
@@ -69,6 +71,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
                 const inventoryCreate = clientAxios.post(`project/${response.data.id}/inventory`)
                 await Promise.all([budgetInicial, budgetFinal, inventoryCreate])
                 setProjectsDashBoard((prevItems) => [...prevItems, response.data])
+                changeModalVisible()
             } else {
                 Alert.alert("Algo ocurrio.")
             }
@@ -76,6 +79,8 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
             if (isAxiosError(error) && error.response) {
                 Alert.alert(error.response.data.error);
             }
+        } finally {
+            setLoad(false)
         }
     }
 
@@ -197,8 +202,10 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
 
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
-                    onPress={() => { changeModalVisible(); handleSubmit() }}>
-                    <Text style={styles.textStyle}>Crear proyecto.</Text>
+                    onPress={() => { handleSubmit() }}
+                    disabled={load}
+                >
+                    <Text style={styles.textStyle}>{load ? "Cargando..." : "Crear proyecto."}</Text>
                 </Pressable>
             </View>
         </View>

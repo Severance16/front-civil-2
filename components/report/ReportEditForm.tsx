@@ -27,6 +27,7 @@ const reportDataInit: ReportData = {
 export default function ReportEditForm({reportProps, type, changeModalVisible, setReport}: ReportEditFormProps) {
 
     const [reportEdit, setReportEdit] = useState(reportProps || reportDataInit)
+    const [load, setLoad] = useState(false)
 
     const changeValue = (key: keyof ReportData, value: string | number) => {
         setReportEdit({
@@ -42,6 +43,7 @@ export default function ReportEditForm({reportProps, type, changeModalVisible, s
                 Alert.alert("El item no cumple con la información mínima obligatoria.")
                 return
             }
+            setLoad(true)
             const { data } = await clientAxios.put(`/project/${type}/${reportProps.id}`,{
                 activity,
                 description,
@@ -51,6 +53,7 @@ export default function ReportEditForm({reportProps, type, changeModalVisible, s
                 Alert.alert("Reporte actualizado.")
                 setReport(response.data)
                 router.navigate(`/(app)/(project)/report?type=${type}&reportId=${reportProps.id}`)
+                changeModalVisible()
             }else{
                 Alert.alert("Algo ocurrio.")
             }
@@ -58,6 +61,8 @@ export default function ReportEditForm({reportProps, type, changeModalVisible, s
             if (isAxiosError(error) && error.response) {
                 Alert.alert(error.response.data.error);
               }
+        } finally {
+            setLoad(false)
         }
     }
 
@@ -97,8 +102,9 @@ export default function ReportEditForm({reportProps, type, changeModalVisible, s
         <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => { changeModalVisible(); handleSubmit() }}
+            disabled={load}
         >
-            <Text style={styles.textStyle}>Guardar {type === "progress" ? "avance" : "percance"}.</Text>
+            <Text style={styles.textStyle}>{load ? `Cargando...` : `Guardar {type === "progress" ? "avance" : "percance"}.`}</Text>
         </Pressable>
     </View>
 </View>

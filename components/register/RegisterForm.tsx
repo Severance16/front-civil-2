@@ -28,8 +28,7 @@ export default function RegisterForm() {
   const [visiblePass, setVisiblePass] = useState(true);
   const [confirmVisiblePass, setConfirmVisiblePass] = useState(true);
   const [user, setUser] = useState<UserRegisterForm>(initialUser);
-
-  
+  const [load, setLoad] = useState(false)
 
   const handleSubmit = async () => {
     if (user.password !== confirmPassword) {
@@ -37,6 +36,7 @@ export default function RegisterForm() {
       return;
     }
     try {
+      setLoad(true)
       const { data } = await clientAxios.post("/auth/create-user", user);
       const response = userSchema.safeParse(data)
       if (response.success) {
@@ -50,6 +50,8 @@ export default function RegisterForm() {
       if (isAxiosError(error) && error.response) {
         Alert.alert(error.response.data.error);
       }
+    } finally {
+      setLoad(false)
     }
   };
 
@@ -251,8 +253,9 @@ export default function RegisterForm() {
       <Button
         title="Registrarse"
         onPress={handleSubmit}
-        accessibilityLabel="Registrarse"
+        accessibilityLabel={load ? "Cargando..." : "Registrarse"}
         color={"#EFAD29"}
+        disabled={load}
       />
     </>
   );

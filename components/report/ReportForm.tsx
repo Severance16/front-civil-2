@@ -30,6 +30,7 @@ const reportDataInit: ReportDataCreate = {
 export default function ReportForm({type, changeModalVisible, projectId, setMishaps, setProgress}: ReportFormProps) {
 
     const [report, setReport] = useState(reportDataInit)
+    const [load, setLoad] = useState(false)
 
     const changeValue = (key: keyof ReportDataCreate, value: string | number) => {
         setReport({
@@ -45,6 +46,7 @@ export default function ReportForm({type, changeModalVisible, projectId, setMish
                 Alert.alert("El item no cumple con la información mínima obligatoria.")
                 return
             }
+            setLoad(true)
             const { data } = await clientAxios.post(`/project/${projectId}/${type}`,{
                 consecutive: generateConsecutive(type),
                 activity,
@@ -58,6 +60,7 @@ export default function ReportForm({type, changeModalVisible, projectId, setMish
                 }else if (type === "progress") {
                     setProgress((prevItems) => [...prevItems, response.data])
                 }
+                changeModalVisible()
             }else{
                 Alert.alert("Algo ocurrio.")
             }
@@ -65,6 +68,8 @@ export default function ReportForm({type, changeModalVisible, projectId, setMish
             if (isAxiosError(error) && error.response) {
                 Alert.alert(error.response.data.error);
               }
+        }finally {
+            setLoad(false)
         }
     }
 
@@ -103,9 +108,11 @@ export default function ReportForm({type, changeModalVisible, projectId, setMish
 
         <Pressable
             style={[styles.button, styles.buttonClose]}
-            onPress={() => { changeModalVisible(); handleSubmit() }}
+            onPress={() => { handleSubmit() }}
+            disabled={load}
         >
-            <Text style={styles.textStyle}>Crear {type === "progress" ? "avance" : "percance"}.</Text>
+
+            <Text style={styles.textStyle}>{load ? `Cargando...` : `Crear ${type === "progress" ? "avance" : "percance"}.`}</Text>
         </Pressable>
     </View>
 </View>
