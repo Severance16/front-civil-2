@@ -33,20 +33,19 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
     const handleSubmit = async () => {
         try {
             const { description, unit, amount, incidence, quantity } = subItem
-            if ([description, amount, incidence].includes("")) {
+            if ([description, amount, incidence, unit, quantity].includes("")) {
                 Alert.alert("La subactividad no cumple con la información mínima obligatoria.")
                 return
             }
             setLoad(true)
             const { data } = await clientAxios.post(`/project/budget/item/${itemId}/subitem`, {
                 description,
-                unit: unit !== "" ? unit : null,
-                quantity: quantity !== "" ? parseFloat(quantity) : null,
+                unit: unit,
+                quantity: parseFloat(quantity),
                 amount: parseFloat(amount),
                 incidence: parseFloat(incidence)
             })
             const response = subItemSchema.safeParse(data)
-            // console.log(response)
             if (response.success) {
                 setSubItems((prevItems) => [...prevItems, response.data])
                 changeModalVisible()

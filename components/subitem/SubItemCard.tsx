@@ -1,11 +1,10 @@
-import { ItemData } from "@/types";
+import { ItemData, SubItemData } from "@/types";
 import { formatCurrency } from "@/utils/currencyParser";
-// import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
 
 type SubItemCardProps = {
-  subItem: ItemData;
+  subItem: SubItemData;
   order: number;
   activityOrder: string;
 };
@@ -13,24 +12,20 @@ type SubItemCardProps = {
 
 export default function SubItemCard({ subItem, order, activityOrder }: SubItemCardProps) {
 
-  const handlePress = () => {
-    // router.push(`/(app)/(project)/(budget)/(item)?itemId=${item.id}`)
-  }
   return (
-    // <TouchableNativeFeedback onPress={handlePress}>
       <View style={styles.container}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flex: 1 }}>
             <Text style={[styles.description]}>{subItem.description}</Text>
           </View>
-          <View style={{ flex: 1, paddingRight: 20}}>
+          <View style={{ width:70, paddingRight: 20}}>
             <Text style={{ textAlign: "right"}}>N. {`${activityOrder}.${order + 1}`}</Text>
           </View>
         </View>
 
         <View style={styles.rowContainer}>
           <View style={styles.datagroup}>
-            <Text style={styles.label}>Valor</Text>
+            <Text style={styles.label}>Valor Unitario</Text>
             <Text style={styles.data}>{formatCurrency(subItem.amount)}</Text>
           </View>
 
@@ -39,8 +34,30 @@ export default function SubItemCard({ subItem, order, activityOrder }: SubItemCa
             <Text style={styles.data}>{subItem.incidence} %</Text>
           </View>
         </View>
+        
+
+        <View style={styles.rowContainer}>
+          {subItem.quantity && (
+            <View style={styles.datagroup}>
+              <Text style={styles.label}>Cantidad</Text>
+              <Text style={styles.data}>{subItem.quantity}</Text>
+            </View>
+          )}
+
+          {subItem.unit && (
+            <View style={styles.datagroup}>
+              <Text style={styles.label}>Unidad</Text>
+              <Text style={styles.data}>{subItem.unit}</Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.rowContainer}>
+          <View style={styles.datagroup}>
+              <Text style={styles.label}>Valor total</Text>
+              <Text style={styles.data}>{subItem.quantity !== null && formatCurrency(subItem.quantity * subItem.amount)}</Text>
+            </View>
+        </View>
       </View>
-    // </TouchableNativeFeedback>
   );
 }
 
@@ -61,7 +78,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: "#F1C16D",
-    fontSize: 25,
+    fontSize: 17,
     fontWeight: "900",
     textAlign: "center"
     // width: 100,
