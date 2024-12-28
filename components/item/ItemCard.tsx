@@ -1,11 +1,11 @@
-import { ItemData } from "@/types";
+import { ItemDataValor } from "@/types";
 import { formatCurrency } from "@/utils/currencyParser";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
 
 type ItemCardProps = {
-  item: ItemData;
+  item: ItemDataValor;
   order: number;
 };
 
@@ -30,12 +30,12 @@ export default function ItemCard({ item, order }: ItemCardProps) {
         <View style={styles.rowContainer}>
           <View style={styles.datagroup}>
             <Text style={styles.label}>Presupuesto</Text>
-            <Text style={styles.data}>{formatCurrency(item.amount)}</Text>
+            <Text style={styles.data}>{item.valors?.total !== undefined ? formatCurrency(item.valors?.total) : 0}</Text>
           </View>
 
           <View style={styles.datagroup}>
             <Text style={styles.label}>Incidencia</Text>
-            <Text style={styles.data}>{item.incidence} %</Text>
+            <Text style={styles.data}>{item.valors?.incidence !== undefined ? item.valors?.incidence : 0} %</Text>
           </View>
         </View>
       </View>

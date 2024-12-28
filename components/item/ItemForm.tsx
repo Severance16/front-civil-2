@@ -1,5 +1,5 @@
 import clientAxios from '@/clients/clientAxios'
-import { ItemData, itemSchema } from '@/types'
+import { ItemData, ItemDataValor, itemSchema } from '@/types'
 import { isAxiosError } from 'axios'
 import React, { useState } from 'react'
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
@@ -7,7 +7,7 @@ import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 interface ItemFormProps {
     changeModalVisible: () => void
     budgetId: string
-    setItems: React.Dispatch<React.SetStateAction<ItemData[]>>
+    setItems: React.Dispatch<React.SetStateAction<ItemDataValor[]>>
 }
 
 type ItemDataCreate = {
@@ -35,16 +35,16 @@ export default function ItemForm({changeModalVisible, budgetId, setItems}: ItemF
 
     const handleSubmit = async () => {
         try {
-            const {description, amount, incidence} = item
-            if ([description, amount, incidence].includes("")) {
+            const {description } = item
+            if (description === "") {
                 Alert.alert("El item no cumple con la información mínima obligatoria.")
                 return
             }
             setLoad(true)
             const { data } = await clientAxios.post(`/project/budget/${budgetId}/item`,{
                 description,
-                amount: parseFloat(amount),
-                incidence: parseFloat(incidence)
+                amount: 0,
+                incidence: 0
             })
             const response = itemSchema.safeParse(data)
             if (response.success) {
@@ -79,32 +79,6 @@ export default function ItemForm({changeModalVisible, budgetId, setItems}: ItemF
                             autoCapitalize="sentences"
                         />
                     </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(e) => {
-                                changeValue("amount", e);
-                            }}
-                            value={item?.amount}
-                            placeholder="Presupuesto"
-                            keyboardType="number-pad"
-                            autoCapitalize="sentences"
-                        />
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(e) => {
-                                changeValue("incidence", e);
-                            }}
-                            value={item?.incidence}
-                            placeholder="Incidencia"
-                            keyboardType="decimal-pad"
-                            autoCapitalize="sentences"
-                        />
-                    </View>
-                    
-
                 </View>
 
                 <Pressable

@@ -3,7 +3,7 @@ import FloatButton from "@/components/general/FloatButton";
 import ModalGeneral from "@/components/general/ModalGeneral";
 import ItemCard from "@/components/item/ItemCard";
 import ItemForm from "@/components/item/ItemForm";
-import { ItemData, itemsSchema } from "@/types";
+import { ItemDataValor, itemsValorsSchema } from "@/types";
 import { isAxiosError } from "axios";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ export default function BudgetDashboard() {
     type: string;
     budgetId: string;
   }>();
-  const [items, setItems] = useState<ItemData[]>([]);
+  const [items, setItems] = useState<ItemDataValor[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   const getItemsBudget = async () => {
@@ -23,7 +23,7 @@ export default function BudgetDashboard() {
         const { data } = await clientAxios.get(
           `/project/budget/${budgetId}/item`
         );
-        const response = itemsSchema.safeParse(data);
+        const response = itemsValorsSchema.safeParse(data);
         if (response.success) {
           setItems(response.data);
         }

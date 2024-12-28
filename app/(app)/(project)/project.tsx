@@ -10,6 +10,7 @@ import BudgetCard from "@/components/budget/BudgetCard";
 import ModalGeneral from "@/components/general/ModalGeneral";
 import ProjectAddColaboraborForm from "@/components/project/ProjectAddColaboratorForm";
 import ProjectAddColaborator from "@/components/project/ProjectAddColaborator";
+import { formatCurrency } from "@/utils/currencyParser";
 
 type BudgetInfo = {
   exist: boolean,
@@ -29,19 +30,22 @@ export default function Project() {
 
   const [project, setProject] = useState<ProjectData | undefined>(undefined);
   const [budget, setBudget] = useState<BudgetDashBoardDataKeys>(initBudget)
+  const [totalBudget, setTotalBudget] = useState<{inicial: number, final: number}>({inicial: 0, final: 0})
   const [modalVisible, setModalVisible] = useState(false)
 
   const getProject = async () => {
     try {
       const getProject = clientAxios(`/project/${projectId}`);
       const getBudget = clientAxios(`/project/${projectId}/budget`)
-      const [projectPromise, budgetPromise] = await Promise.all([getProject, getBudget])
+      const getBudgetTotal = clientAxios<{inicial: number, final: number}>(`/project/${projectId}/budget-total`)
+      const [projectPromise, budgetPromise, budgetTotalPromise ] = await Promise.all([getProject, getBudget, getBudgetTotal])
       const responseProject = projectsSchema.safeParse(projectPromise.data);
       if (responseProject.success === true) {
         setProject(responseProject.data);
       } else {
         setProject(undefined);
       }
+      setTotalBudget(budgetTotalPromise.data)
       const responseBudget = dashboardBudgetSchema.safeParse(budgetPromise.data);
       if (responseBudget.success === true) {
         setBudget(responseBudget.data);
@@ -83,6 +87,16 @@ export default function Project() {
             {Object.keys(budget).map((budgetState, index) => (
               <BudgetCard key={index} type={budgetState} exist={budget[budgetState].exist} budgetId={budget[budgetState].id} />
             ))}
+          </View>
+          <View style={styles.containerBudget}>
+            <View style={{alignItems: "center"}}>
+              <Text style={{color: "#EFAD29"}}>Total</Text>
+              <Text style={{color: "#262829"}}>{formatCurrency(totalBudget.inicial)}</Text>
+            </View>
+            <View style={{alignItems: "center"}}>
+              <Text style={{color: "#EFAD29"}}>Total</Text>
+              <Text style={{color: "#262829"}}>{formatCurrency(totalBudget.final)}</Text>
+            </View>
           </View>
         </View>
       </ScrollView>

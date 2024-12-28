@@ -100,6 +100,17 @@ export const itemSchema = z.object({
   incidence: z.number()
 })
 
+export const itemValorsSchema = z.object({
+  id: z.number(),
+  description: z.string(),
+  amount: z.number(),
+  incidence: z.number(),
+  valors: z.object({
+    total: z.number(),
+    incidence: z.number()
+  }).optional()
+})
+
 export const itemsSchema = z.array(
   itemSchema.pick({
     id: true,
@@ -109,9 +120,21 @@ export const itemsSchema = z.array(
   })
 )
 
+export const itemsValorsSchema = z.array(
+  itemValorsSchema.pick({
+    id: true,
+    description: true,
+    amount: true,
+    incidence: true,
+    valors: true
+  })
+)
+
 type Item = z.infer<typeof itemSchema>
+type ItemValor = z.infer<typeof itemValorsSchema>
 
 export type ItemData = Pick<Item, "id" | "description" | "amount" | "incidence">
+export type ItemDataValor = Pick<ItemValor, "amount" | "description" | "id" | "incidence" | "valors">
 
 export const subItemSchema = z.object({
   id: z.number(),
