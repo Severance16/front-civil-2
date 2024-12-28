@@ -37,7 +37,7 @@ export default function ToolInformation({ tool }: ToolInformation) {
           tool.serviceTime !== null && (
 
             <View style={styles.dataContainer}>
-              <Text style={styles.label}>Tiempo en servicio</Text>
+              <Text style={styles.label}>Vida útil estimada</Text>
               <Text style={styles.dataTool}>{`${tool.serviceTime} meses`}</Text>
             </View>
           )

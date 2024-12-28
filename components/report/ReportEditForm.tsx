@@ -104,7 +104,7 @@ export default function ReportEditForm({reportProps, type, changeModalVisible, s
             onPress={() => { changeModalVisible(); handleSubmit() }}
             disabled={load}
         >
-            <Text style={styles.textStyle}>{load ? `Cargando...` : `Guardar {type === "progress" ? "avance" : "percance"}.`}</Text>
+            <Text style={styles.textStyle}>{load ? `Cargando...` : `Guardar ${type === "progress" ? "avance" : "percance"}.`}</Text>
         </Pressable>
     </View>
 </View>

@@ -128,7 +128,7 @@ export default function ToolForm({inventoryId, changeModalVisible, setTools}: To
                                 changeValue("serviceTime", e);
                             }}
                             value={tool?.serviceTime}
-                            placeholder="Tiempo en servicio"
+                            placeholder="Vida útil estimada (meses)"
                             keyboardType="numeric"
                             autoCapitalize="sentences"
                         />

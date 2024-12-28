@@ -27,7 +27,7 @@ export interface ProjectCreate {
     "Comercial" |
     "Industrial" |
     "Vial" |
-    "Hidrahulica" | null
+    "Hidraulica" | null
 }
 
 export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }: ProjectFormProps) {
@@ -166,7 +166,7 @@ export default function ProjectForm({ changeModalVisible, setProjectsDashBoard }
                             }}
                             value={(project?.authorizedLevels)?.toString()}
                             placeholder="Niveles"
-                            keyboardType="default"
+                            keyboardType="number-pad"
                             autoCapitalize="sentences"
                         />
                     </View>

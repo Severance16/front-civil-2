@@ -26,7 +26,7 @@ export const workType = z.enum([
   "Comercial",
   "Industrial",
   "Vial",
-  "Hidrahulica",
+  "Hidraulica",
 ])
 
 export const projectsSchema = z.object({

@@ -114,7 +114,7 @@ export default function ToolEditForm({ tool, setTool, changeModalVisible }: Tool
                                 changeValue("serviceTime", e);
                             }}
                             value={toolEdit?.serviceTime === null ? "" : toolEdit?.serviceTime.toString()}
-                            placeholder="Tiempo en servicio"
+                            placeholder="Vida útil estimada (meses)"
                             keyboardType="number-pad"
                             textAlignVertical='top'
                         />

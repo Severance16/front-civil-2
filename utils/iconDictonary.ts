@@ -17,7 +17,7 @@ type typeDictionary = {
     Comercial: "store-outline",
     Industrial: "office-building-outline",
     Vial: "road-variant",
-    Hidrahulica: "water-outline",
+    Hidraulica: "water-outline",
 }
 
 const workTypeDictonary: typeDictionary = {
@@ -27,10 +27,10 @@ const workTypeDictonary: typeDictionary = {
   Comercial: "store-outline",
   Industrial: "office-building-outline",
   Vial: "road-variant",
-  Hidrahulica: "water-outline",
+  Hidraulica: "water-outline",
 };
 
-export const IconDictonary = (workType: "Residencial" | "Institucional" | "Urbana" | "Comercial" | "Industrial" | "Vial" | "Hidrahulica"): iconType => {
+export const IconDictonary = (workType: "Residencial" | "Institucional" | "Urbana" | "Comercial" | "Industrial" | "Vial" | "Hidraulica"): iconType => {
     const icon: iconType = workTypeDictonary[workType]
   return icon;
 };

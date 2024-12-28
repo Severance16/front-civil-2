@@ -11,7 +11,7 @@ const items = [
     { label: "Comercial", value: "Comercial" },
     { label: "Industrial", value: "Industrial" },
     { label: "Vial", value: "Vial" },
-    { label: "Hidrahulica", value: "Hidrahulica" },
+    { label: "Hidraulica", value: "Hidraulica" },
 ]
 
 interface ProjectTypePickerProps {
