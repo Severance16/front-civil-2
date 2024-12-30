@@ -28,8 +28,8 @@ const initBudget: BudgetDashBoardDataKeys = {
 
 export default function Project() {
   const { projectId } = useProject();
-  const {budgetReset} = useGlobalSearchParams<{
-    budgetReset: string
+  const params = useGlobalSearchParams<{
+      budgetReset: string
   }>()
 
   const [project, setProject] = useState<ProjectData | undefined>(undefined);
@@ -78,8 +78,8 @@ export default function Project() {
   }
 
   useEffect(() => {
-    getProject();
-  }, [projectId, budgetReset]);
+    getTotals();
+  }, [projectId, params.budgetReset]);
   useEffect(() => {
     getProject();
   }, [projectId]);

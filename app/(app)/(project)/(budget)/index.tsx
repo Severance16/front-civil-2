@@ -5,11 +5,14 @@ import ItemCard from "@/components/item/ItemCard";
 import ItemForm from "@/components/item/ItemForm";
 import { ItemDataValor, itemsValorsSchema } from "@/types";
 import { isAxiosError } from "axios";
-import { useLocalSearchParams } from "expo-router";
+import { useGlobalSearchParams, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function BudgetDashboard() {
+    const params = useGlobalSearchParams<{
+        budgetReset: string
+    }>()
   const { budgetId } = useLocalSearchParams<{
     type: string;
     budgetId: string;
@@ -41,7 +44,7 @@ export default function BudgetDashboard() {
   
   useEffect(() => {
     getItemsBudget();
-  }, [budgetId]);
+  }, [budgetId, params.budgetReset]);
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
