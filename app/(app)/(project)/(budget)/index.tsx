@@ -48,7 +48,7 @@ export default function BudgetDashboard() {
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
-      <Text style={styles.tittle}>Actividades</Text>
+      <Text style={styles.tittle}>Capítulos</Text>
       <Text style={styles.textInfoProjects}>
         {items.length === 0
           ? "No tienes ninguna aun definida."
