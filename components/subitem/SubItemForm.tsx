@@ -1,6 +1,7 @@
 import clientAxios from '@/clients/clientAxios'
 import { SubItemData, subItemSchema } from '@/types'
 import { isAxiosError } from 'axios'
+import { router } from 'expo-router'
 import { useState } from 'react'
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
@@ -49,6 +50,7 @@ export default function SubItemForm({ itemId, changeModalVisible, setSubItems }:
             if (response.success) {
                 setSubItems((prevItems) => [...prevItems, response.data])
                 changeModalVisible()
+                router.setParams({budgetReset: response.data.id})
             } else {
                 Alert.alert("Algo ocurrio.")
             }

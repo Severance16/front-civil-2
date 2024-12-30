@@ -11,6 +11,7 @@ import ModalGeneral from "@/components/general/ModalGeneral";
 import ProjectAddColaboraborForm from "@/components/project/ProjectAddColaboratorForm";
 import ProjectAddColaborator from "@/components/project/ProjectAddColaborator";
 import { formatCurrency } from "@/utils/currencyParser";
+import { useGlobalSearchParams } from "expo-router";
 
 type BudgetInfo = {
   exist: boolean,
@@ -27,6 +28,9 @@ const initBudget: BudgetDashBoardDataKeys = {
 
 export default function Project() {
   const { projectId } = useProject();
+  const {budgetReset} = useGlobalSearchParams<{
+    budgetReset: string
+  }>()
 
   const [project, setProject] = useState<ProjectData | undefined>(undefined);
   const [budget, setBudget] = useState<BudgetDashBoardDataKeys>(initBudget)
@@ -37,15 +41,13 @@ export default function Project() {
     try {
       const getProject = clientAxios(`/project/${projectId}`);
       const getBudget = clientAxios(`/project/${projectId}/budget`)
-      const getBudgetTotal = clientAxios<{inicial: number, final: number}>(`/project/${projectId}/budget-total`)
-      const [projectPromise, budgetPromise, budgetTotalPromise ] = await Promise.all([getProject, getBudget, getBudgetTotal])
+      const [projectPromise, budgetPromise ] = await Promise.all([getProject, getBudget])
       const responseProject = projectsSchema.safeParse(projectPromise.data);
       if (responseProject.success === true) {
         setProject(responseProject.data);
       } else {
         setProject(undefined);
       }
-      setTotalBudget(budgetTotalPromise.data)
       const responseBudget = dashboardBudgetSchema.safeParse(budgetPromise.data);
       if (responseBudget.success === true) {
         setBudget(responseBudget.data);
@@ -58,11 +60,26 @@ export default function Project() {
       }
     }
   };
+  
+  const getTotals = async () => {
+    try {
+      const getBudgetTotal = await clientAxios<{inicial: number, final: number}>(`/project/${projectId}/budget-total`)
+      setTotalBudget(getBudgetTotal.data)
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        Alert.alert(error.response.data.error);
+      }
+    }
+
+  }
 
   const changeModalVisble = () => {
     setModalVisible(!modalVisible)
   }
 
+  useEffect(() => {
+    getProject();
+  }, [projectId, budgetReset]);
   useEffect(() => {
     getProject();
   }, [projectId]);
