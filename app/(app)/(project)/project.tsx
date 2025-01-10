@@ -118,7 +118,7 @@ export default function Project() {
         </View>
       </ScrollView>
       <ModalGeneral changeModalVisible={changeModalVisble} modalVisible={modalVisible} >
-        <ProjectAddColaboraborForm changeModalVisible={changeModalVisble}/>
+        <ProjectAddColaboraborForm changeModalVisible={changeModalVisble} projectId={project.id}/>
       </ModalGeneral>
     </>
   );

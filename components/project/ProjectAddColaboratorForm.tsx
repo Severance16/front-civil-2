@@ -7,29 +7,30 @@ import { formatISO, format, parse, parseISO } from 'date-fns';
 import clientAxios from "@/clients/clientAxios";
 
 type ProjectAddColaboraborFormProps = {
-//   projectId: number;
+  projectId: number;
   changeModalVisible: () => void;
 };
 
 const dateNow = new Date()
 
 
-export default function ProjectAddColaboraborForm({ changeModalVisible }: ProjectAddColaboraborFormProps) {
+export default function ProjectAddColaboraborForm({ changeModalVisible, projectId }: ProjectAddColaboraborFormProps) {
   const [email, setEmail] = useState("");
   const [load, setLoad] = useState(false);
 
   const handleSubmit = async () => {
     const regex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
 
-    if (email === "" || regex.test(email)) {
+    if (email === "" || !regex.test(email)) {
       Alert.alert("Ingresa un email válido.");
       return;
     }
     try {
       setLoad(true);
-      const data = await clientAxios.post<string>(`/project/add-permission`, {email, });
+      const data = await clientAxios.post<string>(`/project/add-permission`, {email, projectId});
       if (data.status === 200) {
         Alert.alert(data.data)
+        changeModalVisible()
       }
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -47,7 +48,6 @@ export default function ProjectAddColaboraborForm({ changeModalVisible }: Projec
         <View style={styles.formContainer}>
 
           <View>
-            <Text>Fecha de registro</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
